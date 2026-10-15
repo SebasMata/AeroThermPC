@@ -280,8 +280,8 @@
           <span class="text-[11px] text-sky-400 font-mono-tech" id="badgeTotalFans">10 Bahías Modulares</span>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
-          <button data-preset="aquarium_antec" class="preset-btn px-2.5 py-1.5 rounded-md text-xs font-medium bg-sky-500/15 border border-sky-500/40 text-sky-300 hover:bg-sky-500/25 transition text-left truncate">
-            🐠 Acuario (Foto Antec)
+          <button data-preset="aquarium_preset" class="preset-btn px-2.5 py-1.5 rounded-md text-xs font-medium bg-sky-500/15 border border-sky-500/40 text-sky-300 hover:bg-sky-500/25 transition text-left truncate">
+            🐠 Acuario
           </button>
           <button data-preset="balanced" class="preset-btn px-2.5 py-1.5 rounded-md text-xs font-medium bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition text-left truncate">
             ⚡ Frontal Mesh Clásico
@@ -506,7 +506,7 @@
     const SIZE = (NX + 2) * (NY + 2);
 
     // Geometría normalizada del gabinete dentro del dominio [0..NX, 0..NY]
-    // Vista lateral estándar (como la foto Antec):
+    // Vista lateral estándar:
     // - Izquierda (xMin) = Panel Trasero (ventilador trasero R1 + slots PCIe)
     // - Derecha (xMax)   = Panel Frontal de Cristal Templado (Acuario) o Frontal Mesh
     // - Parte Inferior (psuTopY .. yMax) = Cámara de PSU de ancho completo con malla perforada inferior
@@ -536,7 +536,7 @@
       thermalLoad: 0.80,             // 0.15 .. 1.0
       gpuLengthMm: 340,              // 200 | 280 | 340 (Por defecto 340mm como la RTX grande de la foto)
       gpuSlotPos: 48,                // 0 (alta) a 100 (baja)
-      cpuCoolerType: 'aio',          // 'tower' | 'lowprofile' | 'aio' (Por defecto AIO como en la foto Antec)
+      cpuCoolerType: 'aio',          // 'tower' | 'lowprofile' | 'aio' 
       cpuTempEst: 54.0,
       gpuTempEst: 61.0,
       deadSpotRatio: 0.05,
@@ -768,7 +768,6 @@
       } else if (simState.cpuCoolerType === 'lowprofile') {
         cpuRect = { x1: 30, x2: 40, y1: 18, y2: 26 };
       } else {
-        // Bloque de bomba AIO con espejo infinito como en la foto Antec
         cpuRect = { x1: 31, x2: 38, y1: 19, y2: 26 };
       }
 
@@ -788,7 +787,7 @@
         }
       }
 
-      // 2. Cámara inferior de la PSU de ancho completo (como en el Antec de la foto):
+      // 2. Cámara inferior de la PSU de ancho completo:
       // La cubierta en psuTopY sostiene los 3 ventiladores inferiores (B1, B2, B3).
       for (let i = CASE_BOUNDS.xMin; i <= CASE_BOUNDS.xMax; i++) {
         solid[IX(i, CASE_BOUNDS.psuTopY)] = 1;
@@ -1546,14 +1545,13 @@
       }
 
       // 2. Si está en modo Acuario, dibujamos primero los ventiladores laterales al fondo en la bandeja derecha
-      // para que el extremo derecho de la GPU de 340mm pase por delante de ellos tal como en la foto Antec
       if (simState.frontMountMode === 'aquarium') {
         fans.filter(f => f.zone === 'front').forEach(fan => {
           drawFanUnit(fan, scaleX, scaleY);
         });
       }
 
-      // 3. Cámara Inferior de la PSU de Ancho Completo con Malla Perforada (estilo Antec de la foto)
+      // 3. Cámara Inferior de la PSU de Ancho Completo con Malla Perforada:
       const psuX = CASE_BOUNDS.xMin * scaleX;
       const psuY = CASE_BOUNDS.psuTopY * scaleY;
       const psuW = (CASE_BOUNDS.xMax - CASE_BOUNDS.xMin) * scaleX;
@@ -1578,7 +1576,7 @@
         }
       }
 
-      // Panel I/O lateral integrado en la cámara de la PSU (USB, Audio, Botón Power y logo Antec como en la foto)
+      // Panel I/O lateral integrado en la cámara de la PSU
       const ioW = 86;
       const ioH = 22;
       const ioX = psuX + psuW * 0.42;
@@ -1603,7 +1601,7 @@
       ctx.fillStyle = '#94a3b8';
       ctx.font = '700 11px "Inter", sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillText('ANTEC // FULL-MESH PSU CHAMBER', psuX + 14, psuY + psuH - 10);
+      ctx.fillText('FULL-MESH PSU CHAMBER', psuX + 14, psuY + psuH - 10);
 
       // 4. Radiador Superior AIO 360mm (bajo los 3 ventiladores del techo)
       if (simState.cpuCoolerType === 'aio') {
@@ -1640,7 +1638,7 @@
       }
 
       if (simState.cpuCoolerType === 'aio') {
-        // Dibujo de bomba circular con anillos espejo infinito ARGB (como el Antec de la foto)
+        // Dibujo de bomba circular con anillos espejo infinito ARGB
         const pumpCx = cpuX + cpuW / 2;
         const pumpCy = cpuY + cpuH / 2;
         const pumpR = Math.max(cpuW, cpuH) * 0.56;
@@ -1744,7 +1742,7 @@
       ctx.font = '700 11px "JetBrains Mono", monospace';
       ctx.textAlign = 'left';
       ctx.fillText(
-        `GEFORCE RTX (${simState.gpuLengthMm}mm)  •  ${simState.gpuTempEst.toFixed(1)}°C`,
+        `GPU (${simState.gpuLengthMm}mm)  •  ${simState.gpuTempEst.toFixed(1)}°C`,
         gpuX + 10,
         gpuY + gpuH / 2 + 4
       );
@@ -1805,7 +1803,7 @@
       const borderColor = !fan.enabled ? '#334155' : activeColor;
       const fillAlpha = !fan.enabled ? 'rgba(15, 23, 42, 0.72)' : (isIntake ? 'rgba(14, 165, 233, 0.24)' : 'rgba(244, 63, 94, 0.24)');
 
-      // Caso especial: Ventiladores derechos en Modo Lateral "Acuario" (vistos de frente en la bandeja lateral como en la foto Antec)
+      // Caso especial: Ventiladores derechos en Modo Lateral "Acuario"
       if (fan.zone === 'front' && simState.frontMountMode === 'aquarium') {
         const rx = fan.gxStart * scaleX;
         const ry = fan.gyStart * scaleY;
@@ -2090,12 +2088,7 @@
      * 7. PERFILES PRECONFIGURADOS Y MANEJADORES DE EVENTOS INTERACTIVOS
      ***************************************************************************/
     function applyFanPreset(presetName) {
-      if (presetName === 'aquarium_antec') {
-        // Configuración exacta del gabinete Antec de la foto:
-        // - Modo Acuario (Cristal frontal + ventiladores laterales F2 y F3 encendidos encima de la PSU)
-        // - 3 ventiladores inferiores (B1, B2, B3) encendidos en Intake encima de la cubierta de la PSU
-        // - 3 ventiladores superiores (T1, T2, T3) en el radiador AIO 360mm en Exhaust
-        // - 1 ventilador trasero (R1) en Exhaust
+      if (presetName === 'aquarium_preset') {
         simState.frontMountMode = 'aquarium';
         simState.cpuCoolerType = 'aio';
         simState.gpuLengthMm = 340;
