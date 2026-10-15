@@ -327,16 +327,26 @@
             <p id="caseWidthWarning" class="hidden text-[11px] text-amber-400 mt-1"></p>
           </div>
 
-          <div>
-            <div class="flex justify-between text-xs mb-1">
-              <label for="sliderPsuHeight" class="text-slate-300 font-medium">Altura Nivel PSU y Ventiladores Inferiores:</label>
-              <span id="psuHeightLabel" class="font-mono-tech text-emerald-400">Nivel Estándar (Base Malla)</span>
+          <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <label for="checkRearPsu" class="flex items-center gap-2 cursor-pointer text-xs font-semibold text-slate-200 select-none">
+                <input id="checkRearPsu" type="checkbox" class="w-4 h-4 rounded border-slate-700 bg-slate-900 text-sky-500 focus:ring-0 focus:ring-offset-0 cursor-pointer" />
+                <span>PSU Trasera (Doble Cámara)</span>
+              </label>
+              <span id="badgePsuType" class="text-[10px] font-mono-tech px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">PSU Inferior</span>
             </div>
-            <input id="sliderPsuHeight" type="range" min="45" max="55" value="50" class="w-full" />
-            <div class="flex justify-between text-[10px] text-slate-500 font-mono-tech mt-0.5">
-              <span>Cámara PSU Alta (Cerca GPU)</span>
-              <span>Estándar</span>
-              <span>Cámara PSU Baja</span>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <label id="lblPsuHeight" for="sliderPsuHeight" class="text-slate-300 font-medium">Altura Nivel PSU y Ventiladores Inferiores:</label>
+                <span id="psuHeightLabel" class="font-mono-tech text-emerald-400">Nivel Estándar (Base Malla)</span>
+              </div>
+              <input id="sliderPsuHeight" type="range" min="45" max="55" value="50" class="w-full" />
+              <div id="psuHeightTicks" class="flex justify-between text-[10px] text-slate-500 font-mono-tech mt-0.5">
+                <span id="tickPsuLeft">Cámara PSU Alta</span>
+                <span id="tickPsuMid">Estándar</span>
+                <span id="tickPsuRight">Cámara PSU Baja</span>
+              </div>
             </div>
           </div>
 
@@ -439,12 +449,12 @@
               </svg>
               <h2 class="text-xs font-bold uppercase tracking-wider text-white">Control Modular por Ventilador</h2>
             </div>
-            <span class="text-[11px] text-emerald-400 font-mono-tech">3 Abajo sobre PSU</span>
+            <span id="badgeBottomFans" class="text-[11px] text-emerald-400 font-mono-tech">3 Abajo sobre PSU</span>
           </div>
 
           <div class="grid grid-cols-4 gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800/80">
-            <button data-zone="bottom" class="zone-tab-btn py-1.5 rounded text-[11px] font-semibold bg-sky-500/20 text-sky-300 border border-sky-500/40 transition">
-              Suelo PSU (3)
+            <button data-zone="bottom" id="tabBottomFans" class="zone-tab-btn py-1.5 rounded text-[11px] font-semibold bg-sky-500/20 text-sky-300 border border-sky-500/40 transition">
+              Inferior (3)
             </button>
             <button data-zone="front" class="zone-tab-btn py-1.5 rounded text-[11px] font-semibold text-slate-400 hover:text-slate-200 border border-transparent transition">
               Lat / Front (3)
@@ -506,6 +516,7 @@
       activeZoneTab: 'bottom',
       frontMountMode: 'aquarium',
       caseWidth: 72,
+      rearPSU: false,
       psuTopY: 50,
       rightFansOffsetY: 2,
       rearFanY: 16,
@@ -664,6 +675,7 @@
 
     function syncDynamicFanPositions() {
       CASE_BOUNDS.psuTopY = simState.psuTopY;
+      CASE_BOUNDS.yMax = simState.rearPSU ? simState.psuTopY : 63;
       CASE_BOUNDS.xMax = CASE_BOUNDS.xMin + simState.caseWidth;
 
       layoutFanRow(fans.filter(f => f.zone === 'bottom'), CASE_BOUNDS.xMin + 4, CASE_BOUNDS.xMax - 11);
@@ -805,16 +817,20 @@
         for (let i = bf.gxStart; i <= bf.gxEnd; i++) {
           solid[IX(i, CASE_BOUNDS.psuTopY)] = 2;
           solid[IX(i, CASE_BOUNDS.psuTopY - 1)] = 0;
-          solid[IX(i, CASE_BOUNDS.psuTopY + 1)] = 0;
+          if (!simState.rearPSU) {
+            solid[IX(i, CASE_BOUNDS.psuTopY + 1)] = 0;
+          }
         }
       });
 
-      for (let j = CASE_BOUNDS.psuTopY + 3; j <= CASE_BOUNDS.yMax; j++) {
-        for (let i = CASE_BOUNDS.xMin; i <= CASE_BOUNDS.xMax; i++) {
-          if (i < CASE_BOUNDS.xMin + 16 && j > CASE_BOUNDS.psuTopY + 4) {
-            solid[IX(i, j)] = 1;
-          } else {
-            solid[IX(i, j)] = 2;
+      if (!simState.rearPSU) {
+        for (let j = CASE_BOUNDS.psuTopY + 3; j <= CASE_BOUNDS.yMax; j++) {
+          for (let i = CASE_BOUNDS.xMin; i <= CASE_BOUNDS.xMax; i++) {
+            if (i < CASE_BOUNDS.xMin + 16 && j > CASE_BOUNDS.psuTopY + 4) {
+              solid[IX(i, j)] = 1;
+            } else {
+              solid[IX(i, j)] = 2;
+            }
           }
         }
       }
@@ -1553,56 +1569,84 @@
         });
       }
 
-      // Cámara inferior de la PSU
-      const psuX = CASE_BOUNDS.xMin * scaleX;
-      const psuY = CASE_BOUNDS.psuTopY * scaleY;
-      const psuW = (CASE_BOUNDS.xMax - CASE_BOUNDS.xMin) * scaleX;
-      const psuH = (CASE_BOUNDS.yMax - CASE_BOUNDS.psuTopY) * scaleY;
+      // Cámara inferior de la PSU o Doble Cámara (PSU Trasera)
+      if (!simState.rearPSU) {
+        const psuX = CASE_BOUNDS.xMin * scaleX;
+        const psuY = CASE_BOUNDS.psuTopY * scaleY;
+        const psuW = (CASE_BOUNDS.xMax - CASE_BOUNDS.xMin) * scaleX;
+        const psuH = (CASE_BOUNDS.yMax - CASE_BOUNDS.psuTopY) * scaleY;
 
-      const psuGrad = ctx.createLinearGradient(psuX, psuY, psuX, psuY + psuH);
-      psuGrad.addColorStop(0, 'rgba(30, 41, 59, 0.95)');
-      psuGrad.addColorStop(1, 'rgba(15, 23, 42, 0.98)');
-      ctx.fillStyle = psuGrad;
-      ctx.strokeStyle = '#475569';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.roundRect(psuX, psuY, psuW, psuH, [0, 0, 8, 8]);
-      ctx.fill();
-      ctx.stroke();
+        const psuGrad = ctx.createLinearGradient(psuX, psuY, psuX, psuY + psuH);
+        psuGrad.addColorStop(0, 'rgba(30, 41, 59, 0.95)');
+        psuGrad.addColorStop(1, 'rgba(15, 23, 42, 0.98)');
+        ctx.fillStyle = psuGrad;
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(psuX, psuY, psuW, psuH, [0, 0, 8, 8]);
+        ctx.fill();
+        ctx.stroke();
 
-      ctx.fillStyle = 'rgba(9, 13, 22, 0.72)';
-      for (let py = psuY + 12; py < psuY + psuH - 6; py += 5) {
-        for (let px = psuX + 10; px < psuX + psuW - 10; px += 6) {
-          ctx.fillRect(px, py, 2.5, 2.5);
+        ctx.fillStyle = 'rgba(9, 13, 22, 0.72)';
+        for (let py = psuY + 12; py < psuY + psuH - 6; py += 5) {
+          for (let px = psuX + 10; px < psuX + psuW - 10; px += 6) {
+            ctx.fillRect(px, py, 2.5, 2.5);
+          }
         }
+
+        // Panel I/O lateral
+        const ioW = 86;
+        const ioH = 22;
+        const ioX = psuX + psuW * 0.42;
+        const ioY = psuY + 8;
+        ctx.fillStyle = '#1e293b';
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.roundRect(ioX, ioY, ioW, ioH, 3);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(ioX + 10, ioY + 8, 8, 5);
+        ctx.fillRect(ioX + 24, ioY + 7, 12, 7);
+        ctx.beginPath();
+        ctx.arc(ioX + 48, ioY + 11, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.strokeRect(ioX + 66, ioY + 5, 11, 11);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '700 11px "Inter", sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('PSU CHAMBER', psuX + 14, psuY + psuH - 10);
+      } else {
+        // En PSU trasera (Doble Cámara): no hay sótano inferior; la fuente va detrás de la placa base
+        const floorY = CASE_BOUNDS.psuTopY * scaleY;
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.45)';
+        ctx.font = '700 9px "JetBrains Mono", monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText('⛶ PSU TRASERA (DOBLE CÁMARA)', caseX + 14, floorY - 8);
+
+        // Panel I/O superior compacto en el techo del chasis
+        const topIoX = caseX + caseW - 68;
+        const topIoY = caseY - 7;
+        ctx.fillStyle = '#1e293b';
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.roundRect(topIoX, topIoY, 56, 6, 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.arc(topIoX + 10, topIoY + 3, 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#64748b';
+        ctx.fillRect(topIoX + 22, topIoY + 1.5, 7, 3);
+        ctx.fillRect(topIoX + 35, topIoY + 1.5, 7, 3);
       }
-
-      // Panel I/O lateral
-      const ioW = 86;
-      const ioH = 22;
-      const ioX = psuX + psuW * 0.42;
-      const ioY = psuY + 8;
-      ctx.fillStyle = '#1e293b';
-      ctx.strokeStyle = '#475569';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.roundRect(ioX, ioY, ioW, ioH, 3);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = '#0f172a';
-      ctx.fillRect(ioX + 10, ioY + 8, 8, 5);
-      ctx.fillRect(ioX + 24, ioY + 7, 12, 7);
-      ctx.beginPath();
-      ctx.arc(ioX + 48, ioY + 11, 3, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = '#38bdf8';
-      ctx.strokeRect(ioX + 66, ioY + 5, 11, 11);
-
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '700 11px "Inter", sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText('PSU CHAMBER', psuX + 14, psuY + psuH - 10);
 
       // Radiador superior (AIO), cubre los ventiladores superiores que caben
       const fittedTopFans = fans.filter(f => f.zone === 'top' && f.fits !== false);
@@ -2003,12 +2047,13 @@
       const zoneFans = fans.filter(f => f.zone === simState.activeZoneTab);
 
       container.innerHTML = zoneFans.map(fan => {
+        const displayName = simState.rearPSU ? fan.name.replace('(Sobre PSU)', '(Piso)') : fan.name;
         if (fan.fits === false) {
           return `
           <div class="p-3 rounded-lg bg-slate-950/60 border border-dashed border-slate-800 flex items-center justify-between gap-2 opacity-60">
             <div class="flex items-center gap-2">
               <span class="px-1.5 py-0.5 text-[11px] font-mono-tech font-bold rounded bg-slate-800 text-slate-500">${fan.id}</span>
-              <span class="text-xs font-semibold text-slate-400">${fan.name}</span>
+              <span class="text-xs font-semibold text-slate-400">${displayName}</span>
             </div>
             <span class="text-[10px] font-mono-tech text-amber-400">${fan.zone === 'front' ? 'Sin espacio vertical' : 'No cabe en este gabinete'}</span>
           </div>
@@ -2021,7 +2066,7 @@
             <div class="flex items-center justify-between gap-2">
               <div class="flex items-center gap-2">
                 <span class="px-1.5 py-0.5 text-[11px] font-mono-tech font-bold rounded ${fan.enabled ? (isIntake ? 'bg-sky-500/20 text-sky-300' : 'bg-rose-500/20 text-rose-300') : 'bg-slate-800 text-slate-400'}">${fan.id}</span>
-                <span class="text-xs font-semibold text-slate-200">${fan.name}</span>
+                <span class="text-xs font-semibold text-slate-200">${displayName}</span>
               </div>
               <button data-fan-toggle="${fan.id}" class="px-2.5 py-1 rounded text-[11px] font-semibold transition ${fan.enabled ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
                 ${fan.enabled ? 'ENCENDIDO' : 'APAGADO'}
@@ -2119,6 +2164,54 @@
       }
     }
 
+    function updatePsuHeightUI() {
+      const isRear = simState.rearPSU;
+      const val = simState.psuTopY;
+      const lblTitle = document.getElementById('lblPsuHeight');
+      const badgePsu = document.getElementById('badgePsuType');
+      const labelVal = document.getElementById('psuHeightLabel');
+      const tickLeft = document.getElementById('tickPsuLeft');
+      const tickMid = document.getElementById('tickPsuMid');
+      const tickRight = document.getElementById('tickPsuRight');
+      const badgeBottom = document.getElementById('badgeBottomFans');
+      const tabBottom = document.getElementById('tabBottomFans');
+
+      if (isRear) {
+        if (lblTitle) lblTitle.textContent = 'Altura del Gabinete (Case):';
+        if (badgePsu) {
+          badgePsu.textContent = 'Doble Cámara (PSU Trasera)';
+          badgePsu.className = 'text-[10px] font-mono-tech px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-500/40';
+        }
+        const mmHeight = Math.round((val - CASE_BOUNDS.yMin) * MM_PER_CELL);
+        const desc = val < 46 ? 'Compacto' : (val > 52 ? 'Amplio' : 'Estándar');
+        if (labelVal) {
+          labelVal.textContent = `~${mmHeight} mm (${desc})`;
+          labelVal.className = 'font-mono-tech text-sky-400 font-semibold';
+        }
+        if (tickLeft) tickLeft.textContent = 'Bajo (Compacto)';
+        if (tickMid) tickMid.textContent = 'Medio';
+        if (tickRight) tickRight.textContent = 'Alto';
+        if (badgeBottom) badgeBottom.textContent = '3 en Piso del Case';
+        if (tabBottom) tabBottom.textContent = 'Piso (3)';
+      } else {
+        if (lblTitle) lblTitle.textContent = 'Altura Nivel PSU y Ventiladores Inferiores:';
+        if (badgePsu) {
+          badgePsu.textContent = 'PSU Inferior';
+          badgePsu.className = 'text-[10px] font-mono-tech px-1.5 py-0.5 rounded bg-slate-800 text-slate-400';
+        }
+        const label = val < 48 ? 'Cámara PSU Alta (Fans cerca de GPU)' : (val > 52 ? 'Cámara PSU Baja (Más espacio)' : 'Nivel Estándar (Base Malla)');
+        if (labelVal) {
+          labelVal.textContent = label;
+          labelVal.className = 'font-mono-tech text-emerald-400 font-semibold';
+        }
+        if (tickLeft) tickLeft.textContent = 'Cámara PSU Alta';
+        if (tickMid) tickMid.textContent = 'Estándar';
+        if (tickRight) tickRight.textContent = 'Cámara PSU Baja';
+        if (badgeBottom) badgeBottom.textContent = '3 Abajo sobre PSU';
+        if (tabBottom) tabBottom.textContent = 'Inferior (3)';
+      }
+    }
+
     function updateMountModeUI() {
       document.querySelectorAll('.mount-mode-btn').forEach(btn => {
         const active = btn.dataset.mountmode === simState.frontMountMode;
@@ -2176,6 +2269,7 @@
 
       updateMountModeUI();
       rebuildSolidGrid();
+      updatePsuHeightUI();
       updateRightFansYUI();
       updateCaseWidthUI();
       renderFanControlsList();
@@ -2210,12 +2304,33 @@
         renderFanControlsList();
       });
 
-      document.getElementById('sliderPsuHeight').addEventListener('input', (e) => {
-        const val = parseInt(e.target.value, 10);
-        simState.psuTopY = val;
-        const label = val < 48 ? 'Cámara PSU Alta (Fans cerca de GPU)' : (val > 52 ? 'Cámara PSU Baja (Más espacio)' : 'Nivel Estándar (Base Malla)');
-        document.getElementById('psuHeightLabel').textContent = label;
+      document.getElementById('checkRearPsu').addEventListener('change', (e) => {
+        simState.rearPSU = e.target.checked;
+        const sliderPsu = document.getElementById('sliderPsuHeight');
+        if (simState.rearPSU) {
+          sliderPsu.min = '40';
+          sliderPsu.max = '56';
+          if (simState.psuTopY < 40) simState.psuTopY = 40;
+          if (simState.psuTopY > 56) simState.psuTopY = 56;
+          sliderPsu.value = simState.psuTopY;
+        } else {
+          sliderPsu.min = '45';
+          sliderPsu.max = '55';
+          if (simState.psuTopY < 45) simState.psuTopY = 45;
+          if (simState.psuTopY > 55) simState.psuTopY = 55;
+          sliderPsu.value = simState.psuTopY;
+        }
         rebuildSolidGrid();
+        updatePsuHeightUI();
+        updateRightFansYUI();
+        updateCaseWidthUI();
+        renderFanControlsList();
+      });
+
+      document.getElementById('sliderPsuHeight').addEventListener('input', (e) => {
+        simState.psuTopY = parseInt(e.target.value, 10);
+        rebuildSolidGrid();
+        updatePsuHeightUI();
         updateRightFansYUI();
         updateCaseWidthUI();
         renderFanControlsList();
@@ -2494,6 +2609,7 @@
     window.onload = function () {
       resizeCanvas();
       rebuildSolidGrid();
+      updatePsuHeightUI();
       updateCaseWidthUI();
       updateRightFansYUI();
       resetFluidFields();
