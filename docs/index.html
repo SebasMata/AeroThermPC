@@ -615,9 +615,21 @@
 
     // Distribuye una fila de ventiladores a lo largo del tramo disponible;
     // los que no caben se marcan con fits = false (el más frontal se descarta primero).
+    // Cada ventilador de 120 mm mide FAN_CELLS = 17 celdas (~119 mm).
+    // Un montaje triple (360 mm) requiere un vano libre mínimo de 53 celdas (gabinete >= 62 celdas / ~434 mm)
+    // para alojar los 3 ventiladores más el espacio de marcos y radiador.
+    // A partir de 427 mm (61 celdas) o menos, no hay espacio para el 3er ventilador (pasa a dual 240 mm).
     function layoutFanRow(rowFans, spanStart, spanEnd) {
       const span = spanEnd - spanStart;
-      const count = Math.max(0, Math.min(rowFans.length, Math.floor((span + 3) / (FAN_CELLS + 3))));
+      let count = 0;
+      if (span >= 53) {
+        count = Math.min(rowFans.length, 3);
+      } else if (span >= 34) {
+        count = Math.min(rowFans.length, 2);
+      } else if (span >= 17) {
+        count = Math.min(rowFans.length, 1);
+      }
+
       const segment = count > 0 ? span / count : 0;
       rowFans.forEach((fan, idx) => {
         fan.fits = idx < count;
@@ -678,8 +690,10 @@
       CASE_BOUNDS.yMax = simState.rearPSU ? simState.psuTopY : 63;
       CASE_BOUNDS.xMax = CASE_BOUNDS.xMin + simState.caseWidth;
 
-      layoutFanRow(fans.filter(f => f.zone === 'bottom'), CASE_BOUNDS.xMin + 4, CASE_BOUNDS.xMax - 11);
-      layoutFanRow(fans.filter(f => f.zone === 'top'), CASE_BOUNDS.xMin + 8, CASE_BOUNDS.xMax - 7);
+      const fanSpanStart = CASE_BOUNDS.xMin + 4;
+      const fanSpanEnd = CASE_BOUNDS.xMax - 5;
+      layoutFanRow(fans.filter(f => f.zone === 'bottom'), fanSpanStart, fanSpanEnd);
+      layoutFanRow(fans.filter(f => f.zone === 'top'), fanSpanStart, fanSpanEnd);
       layoutFrontFans();
 
       fans.forEach(fan => {
@@ -768,9 +782,7 @@
      * 3. CONSTRUCCIÓN DE OBSTÁCULOS SÓLIDOS (CHASIS, PSU MESH, GPU, CPU COOLER)
      ***************************************************************************/
     function getHardwareRects() {
-      let gpuCellsWidth = 35;
-      if (simState.gpuLengthMm === 200) gpuCellsWidth = 24;
-      if (simState.gpuLengthMm === 340) gpuCellsWidth = 48;
+      const gpuCellsWidth = Math.round(simState.gpuLengthMm / MM_PER_CELL);
 
       const maxGpuTopY = CASE_BOUNDS.psuTopY - 9;
       const minGpuTopY = 29;
