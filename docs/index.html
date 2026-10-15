@@ -75,11 +75,9 @@
 </head>
 <body class="min-h-screen lg:h-screen flex flex-col select-none bg-[#070b12] text-slate-100 lg:overflow-hidden">
 
-  <!-- TOP HEADER & REAL-TIME TELEMETRY HUD -->
   <header class="border-b border-slate-800/90 bg-slate-950/90 backdrop-blur-md px-4 py-2.5 shrink-0 z-20">
     <div class="max-w-[1920px] mx-auto flex flex-wrap items-center justify-between gap-3">
       
-      <!-- Brand / Title -->
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20 border border-sky-400/30">
           <svg class="w-5 h-5 text-white animate-spin" style="animation-duration: 6s;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -99,10 +97,7 @@
         </div>
       </div>
 
-      <!-- Real-Time Metrics Ribbon -->
       <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-        
-        <!-- Intake vs Exhaust CFM -->
         <div class="bg-slate-900/90 border border-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-3">
           <div>
             <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Entrada (Intake)</div>
@@ -115,7 +110,6 @@
           </div>
         </div>
 
-        <!-- Case Pressure Status -->
         <div id="pressureCard" class="bg-slate-900/90 border border-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-2.5 min-w-[175px]">
           <div id="pressureDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></div>
           <div>
@@ -127,7 +121,6 @@
           </div>
         </div>
 
-        <!-- CPU & GPU Estimated Temperatures -->
         <div class="bg-slate-900/90 border border-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-3">
           <div class="flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-sm bg-amber-400"></span>
@@ -146,7 +139,6 @@
           </div>
         </div>
 
-        <!-- Dead Spots / Stagnant Air Detector -->
         <div id="deadSpotCard" class="bg-slate-900/90 border border-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-2 transition-colors">
           <svg id="deadSpotIcon" class="w-4 h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -164,16 +156,10 @@
     </div>
   </header>
 
-  <!-- MAIN WORKSPACE -->
   <main class="flex-1 flex flex-col lg:flex-row overflow-hidden max-w-[1920px] w-full mx-auto">
-
-    <!-- LEFT / CENTER: INTERACTIVE 2D SIMULATION VIEWPORT -->
     <section class="flex-1 flex flex-col bg-grid-pattern relative min-h-[480px] lg:min-h-0">
-      
-      <!-- Top Viewport Visualization Toolbar -->
       <div class="p-3 flex flex-wrap items-center justify-between gap-2 bg-slate-950/75 border-b border-slate-800/80 backdrop-blur-sm z-10">
         
-        <!-- Visualization Layer Switches -->
         <div class="flex flex-wrap items-center gap-1.5">
           <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mr-1">Capas:</span>
           
@@ -200,7 +186,6 @@
           </button>
         </div>
 
-        <!-- Background Field Heatmap Selector & Particle Color Mode -->
         <div class="flex flex-wrap items-center gap-2">
           <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded-md px-2 py-1">
             <label for="selectHeatmap" class="text-[11px] text-slate-400 font-medium">Mapa de Fondo:</label>
@@ -222,11 +207,9 @@
         </div>
       </div>
 
-      <!-- Canvas Container -->
       <div id="canvasWrapper" class="flex-1 relative flex items-center justify-center p-2 sm:p-4 overflow-hidden">
         <canvas id="cfdCanvas" class="rounded-xl shadow-2xl border border-slate-800/90 bg-[#060911] cursor-crosshair max-w-full max-h-full"></canvas>
 
-        <!-- Floating Sensor Probe Tooltip (appears on hover over canvas) -->
         <div id="probeTooltip" class="pointer-events-none hidden absolute z-20 bg-slate-950/90 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-[11px] font-mono-tech text-slate-200 shadow-xl backdrop-blur-md">
           <div class="flex items-center gap-2">
             <span class="text-sky-400 font-semibold" id="probeZone">Cámara Principal</span>
@@ -238,7 +221,6 @@
           </div>
         </div>
 
-        <!-- Bottom Legend Overlay -->
         <div class="absolute bottom-4 left-4 right-4 pointer-events-none flex flex-wrap items-center justify-between gap-2 text-[11px]">
           <div class="bg-slate-950/85 border border-slate-800/90 backdrop-blur-md px-3 py-1.5 rounded-lg flex flex-wrap items-center gap-3 text-slate-300">
             <div class="flex items-center gap-1.5">
@@ -270,10 +252,8 @@
       </div>
     </section>
 
-    <!-- RIGHT SIDEBAR: HARDWARE & MODULAR FAN CONTROL PANEL -->
     <aside class="w-full lg:w-[440px] xl:w-[480px] bg-slate-950 border-t lg:border-t-0 lg:border-l border-slate-800/90 flex flex-col shrink-0 lg:h-full overflow-hidden">
       
-      <!-- Quick Presets Section -->
       <div class="p-3.5 border-b border-slate-800/90 bg-slate-900/40 shrink-0">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Perfiles Preconfigurados</span>
@@ -301,10 +281,8 @@
         </div>
       </div>
 
-      <!-- Scrollable Controls Container -->
       <div class="flex-1 overflow-y-auto p-3.5 space-y-4">
 
-        <!-- SECTION 1: CHASSIS ARCHITECTURE & FAN HEIGHT ADJUSTMENTS -->
         <div class="bg-slate-900/70 border border-slate-800/90 rounded-xl p-3.5 space-y-3.5">
           <div class="flex items-center justify-between border-b border-slate-800 pb-2">
             <div class="flex items-center gap-2">
@@ -316,7 +294,6 @@
             <span class="text-[11px] font-mono-tech text-sky-400">Acuario / Mesh</span>
           </div>
 
-          <!-- Toggle Front Mesh vs Side Aquarium Mode -->
           <div>
             <div class="flex justify-between text-xs mb-1.5">
               <span class="text-slate-300 font-medium">Disposición Derecha (Frontal vs. Lateral Acuario):</span>
@@ -336,7 +313,6 @@
             </p>
           </div>
 
-          <!-- PSU Shroud & 3 Bottom Fans Height Slider -->
           <div>
             <div class="flex justify-between text-xs mb-1">
               <label for="sliderPsuHeight" class="text-slate-300 font-medium">Altura Nivel PSU y 3 Ventiladores Inferiores:</label>
@@ -350,7 +326,6 @@
             </div>
           </div>
 
-          <!-- Side / Front Fans Vertical Height Slider -->
           <div>
             <div class="flex justify-between text-xs mb-1">
               <label for="sliderRightFansY" class="text-slate-300 font-medium">Altura Ventiladores Laterales / Frontales:</label>
@@ -364,7 +339,6 @@
             </div>
           </div>
 
-          <!-- Rear Fan Vertical Height Slider -->
           <div>
             <div class="flex justify-between text-xs mb-1">
               <label for="sliderRearFanY" class="text-slate-300 font-medium">Altura Ventilador Trasero (R1):</label>
@@ -374,7 +348,6 @@
           </div>
         </div>
 
-        <!-- SECTION 2: INTERNAL HARDWARE & OBSTACLES -->
         <div class="bg-slate-900/70 border border-slate-800/90 rounded-xl p-3.5 space-y-3.5">
           <div class="flex items-center justify-between border-b border-slate-800 pb-2">
             <div class="flex items-center gap-2">
@@ -386,7 +359,6 @@
             <span class="text-[11px] font-mono-tech text-slate-400">Obstáculos 2D</span>
           </div>
 
-          <!-- GPU Length Selector -->
           <div>
             <div class="flex justify-between text-xs mb-1.5">
               <span class="text-slate-300 font-medium">Longitud de Tarjeta Gráfica (GPU):</span>
@@ -405,7 +377,6 @@
             </div>
           </div>
 
-          <!-- GPU Vertical Position Slider -->
           <div>
             <div class="flex justify-between text-xs mb-1">
               <label for="sliderGpuY" class="text-slate-300 font-medium">Altura Vertical GPU (Distancia a los 3 Fans Inferiores):</label>
@@ -419,7 +390,6 @@
             </div>
           </div>
 
-          <!-- CPU Cooler Type -->
           <div>
             <div class="flex justify-between text-xs mb-1.5">
               <span class="text-slate-300 font-medium">Tipo de Disipador CPU:</span>
@@ -437,7 +407,6 @@
             </div>
           </div>
 
-          <!-- Thermal Load Slider -->
           <div>
             <div class="flex justify-between text-xs mb-1">
               <label for="sliderThermalLoad" class="text-slate-300 font-medium">Carga Térmica del Sistema (Estrés CPU+GPU):</label>
@@ -447,7 +416,6 @@
           </div>
         </div>
 
-        <!-- SECTION 3: MODULAR FAN CONFIGURATION BY ZONE -->
         <div class="bg-slate-900/70 border border-slate-800/90 rounded-xl p-3.5 space-y-3">
           <div class="flex items-center justify-between border-b border-slate-800 pb-2">
             <div class="flex items-center gap-2">
@@ -459,7 +427,6 @@
             <span class="text-[11px] text-emerald-400 font-mono-tech">3 Abajo sobre PSU</span>
           </div>
 
-          <!-- Zone Filter Tabs -->
           <div class="grid grid-cols-4 gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800/80">
             <button data-zone="bottom" class="zone-tab-btn py-1.5 rounded text-[11px] font-semibold bg-sky-500/20 text-sky-300 border border-sky-500/40 transition">
               Suelo PSU (3)
@@ -475,13 +442,10 @@
             </button>
           </div>
 
-          <!-- Dynamic Fan List Container -->
           <div id="fanControlsList" class="space-y-2.5">
-            <!-- Populated dynamically by JavaScript -->
           </div>
         </div>
 
-        <!-- SECTION 4: DIAGNOSTIC SUMMARY & ENGINEERING NOTES -->
         <div class="bg-slate-900/70 border border-slate-800/90 rounded-xl p-3.5 space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Diagnóstico Aerodinámico en Vivo</span>
@@ -496,47 +460,40 @@
     </aside>
   </main>
 
-  <!-- COMPLETE EULERIAN + LAGRANGIAN CFD SIMULATION ENGINE -->
   <script>
     /***************************************************************************
      * 1. DEFINICIÓN DE PARÁMETROS DEL SOLVER DE FLUIDOS (NAVIER-STOKES 2D)
      ***************************************************************************/
-    const NX = 96; // Celdas horizontales de la grilla Euleriana
-    const NY = 72; // Celdas verticales de la grilla Euleriana
+    const NX = 96;
+    const NY = 72;
     const SIZE = (NX + 2) * (NY + 2);
 
-    // Geometría normalizada del gabinete dentro del dominio [0..NX, 0..NY]
-    // Vista lateral estándar:
-    // - Izquierda (xMin) = Panel Trasero (ventilador trasero R1 + slots PCIe)
-    // - Derecha (xMax)   = Panel Frontal de Cristal Templado (Acuario) o Frontal Mesh
-    // - Parte Inferior (psuTopY .. yMax) = Cámara de PSU de ancho completo con malla perforada inferior
     const CASE_BOUNDS = {
       xMin: 12,
       xMax: 84,
       yMin: 9,
       yMax: 63,
-      psuTopY: 50 // Nivel ajustable de la cubierta superior de la PSU (donde se montan los 3 ventiladores inferiores)
+      psuTopY: 50
     };
 
-    // Estado global de configuración y hardware
     const simState = {
       paused: false,
       showParticles: true,
       showVectors: false,
       showThermal: true,
       showDeadZones: false,
-      heatmapMode: 'pressure',       // 'pressure' | 'temperature' | 'velocity' | 'none'
-      particleColorMode: 'thermal',  // 'thermal' | 'speed'
-      activeZoneTab: 'bottom',       // Pestaña inicial mostrando los 3 ventiladores inferiores sobre la PSU
-      frontMountMode: 'aquarium',    // 'aquarium' (Laterales + Cristal Frontal) | 'front' (Frontal Mesh)
-      psuTopY: 50,                   // Altura de la cubierta de la PSU y de los 3 ventiladores inferiores (45..55)
-      rightFansOffsetY: 2,           // Desplazamiento vertical de la columna de ventiladores laterales/frontales (-4..+6)
-      rearFanY: 16,                  // Posición Y superior del ventilador trasero R1 (11..28)
-      ambientTemp: 24.0,             // °C
-      thermalLoad: 0.80,             // 0.15 .. 1.0
-      gpuLengthMm: 340,              // 200 | 280 | 340 (Longitud GPU en mm)
-      gpuSlotPos: 48,                // 0 (alta) a 100 (baja)
-      cpuCoolerType: 'aio',          // 'tower' | 'lowprofile' | 'aio' 
+      heatmapMode: 'pressure',
+      particleColorMode: 'thermal',
+      activeZoneTab: 'bottom',
+      frontMountMode: 'aquarium',
+      psuTopY: 50,
+      rightFansOffsetY: 2,
+      rearFanY: 16,
+      ambientTemp: 24.0,
+      thermalLoad: 0.80,
+      gpuLengthMm: 340,
+      gpuSlotPos: 48,
+      cpuCoolerType: 'aio',
       cpuTempEst: 54.0,
       gpuTempEst: 61.0,
       deadSpotRatio: 0.05,
@@ -545,13 +502,7 @@
       fanBladePhase: 0
     };
 
-    // Configuración modular de los 10 ventiladores:
-    // - 3 Inferiores encima del nivel de la PSU (B1, B2, B3)
-    // - 3 Derechos que pueden ser Laterales tipo Acuario o Frontales Mesh (F1, F2, F3)
-    // - 3 Superiores en el techo (T1, T2, T3)
-    // - 1 Trasero (R1)
     const fans = [
-      // ZONA SUELO / ENCIMA DE LA PSU (3 ventiladores horizontales montados sobre psuTopY)
       {
         id: 'B1', zone: 'bottom', name: 'Inferior 1 - Izquierdo (Sobre PSU)',
         orientation: 'horizontal', side: 'bottom',
@@ -573,8 +524,6 @@
         inwardNormal: { x: 0, y: -1 },
         enabled: true, mode: 'intake', rpm: 1400
       },
-
-      // ZONA DERECHA: LATERALES (MODO ACUARIO) O FRONTALES (MODO MESH)
       {
         id: 'F1', zone: 'front', name: 'Lateral/Frontal Superior (F1)',
         orientation: 'vertical', side: 'front',
@@ -599,8 +548,6 @@
         inwardNormal: { x: -1, y: 0 },
         enabled: true, mode: 'intake', rpm: 1450
       },
-
-      // ZONA SUPERIOR / TECHO (3 ventiladores en y = CASE_BOUNDS.yMin)
       {
         id: 'T1', zone: 'top', name: 'Superior 1 - Trasero',
         orientation: 'horizontal', side: 'top',
@@ -622,8 +569,6 @@
         inwardNormal: { x: 0, y: 1 },
         enabled: true, mode: 'exhaust', rpm: 1350
       },
-
-      // ZONA TRASERA (1 ventilador en x = CASE_BOUNDS.xMin con altura ajustable)
       {
         id: 'R1', zone: 'rear', name: 'Trasero Principal ARGB (R1)',
         orientation: 'vertical', side: 'rear',
@@ -633,16 +578,13 @@
       }
     ];
 
-    // Sincroniza las coordenadas dinámicas de los ventiladores según la altura de PSU, el offset lateral/frontal y el modo Acuario
     function syncDynamicFanPositions() {
       CASE_BOUNDS.psuTopY = simState.psuTopY;
 
       fans.forEach(fan => {
         if (fan.zone === 'bottom') {
-          // Los 3 ventiladores inferiores descansan justo encima de la cubierta de la PSU
           fan.gy = CASE_BOUNDS.psuTopY - 1;
         } else if (fan.zone === 'front') {
-          // Aplicamos el offset de altura vertical asegurando que no choquen con el techo ni bajen más allá de la cubierta PSU
           const span = fan.baseGyEnd - fan.baseGyStart;
           let newStart = fan.baseGyStart + simState.rightFansOffsetY;
           let newEnd = newStart + span;
@@ -657,7 +599,6 @@
           fan.gyStart = newStart;
           fan.gyEnd = newEnd;
 
-          // En modo Acuario están montados en la bandeja lateral derecha (x = 70..80); en modo Frontal Mesh en el borde frontal xMax
           fan.gx = simState.frontMountMode === 'aquarium' ? (CASE_BOUNDS.xMax - 8) : CASE_BOUNDS.xMax;
           fan.gxStart = CASE_BOUNDS.xMax - 14;
           fan.gxEnd = CASE_BOUNDS.xMax - 3;
@@ -701,11 +642,9 @@
         if (activeIntakes.length > 0 && Math.random() < 0.86) {
           const fan = activeIntakes[Math.floor(Math.random() * activeIntakes.length)];
           if (fan.zone === 'bottom') {
-            // Nace en la malla inferior o justo en las aspas del ventilador sobre la PSU
             x = fan.gxStart + Math.random() * (fan.gxEnd - fan.gxStart);
             y = fan.gy - Math.random() * 2.2;
           } else if (fan.zone === 'front' && simState.frontMountMode === 'aquarium') {
-            // Nace dentro del anillo del ventilador lateral tipo Acuario
             const cx = (fan.gxStart + fan.gxEnd) * 0.5;
             const cy = (fan.gyStart + fan.gyEnd) * 0.5;
             const ang = Math.random() * Math.PI * 2;
@@ -746,9 +685,8 @@
     function getHardwareRects() {
       let gpuCellsWidth = 35;
       if (simState.gpuLengthMm === 200) gpuCellsWidth = 24;
-      if (simState.gpuLengthMm === 340) gpuCellsWidth = 48; // GPU de gran longitud extendida hacia la bahía frontal
+      if (simState.gpuLengthMm === 340) gpuCellsWidth = 48;
 
-      // Posición vertical de GPU limitada para quedar siempre encima de los 3 ventiladores inferiores sobre la PSU
       const maxGpuTopY = CASE_BOUNDS.psuTopY - 9;
       const minGpuTopY = 29;
       const gpuY = Math.round(minGpuTopY + (simState.gpuSlotPos / 100) * Math.max(2, maxGpuTopY - minGpuTopY));
@@ -776,7 +714,6 @@
       syncDynamicFanPositions();
       solid.fill(0);
 
-      // 1. Paredes exteriores del gabinete
       for (let j = 0; j <= NY + 1; j++) {
         for (let i = 0; i <= NX + 1; i++) {
           if (i < CASE_BOUNDS.xMin || i > CASE_BOUNDS.xMax || j < CASE_BOUNDS.yMin || j > CASE_BOUNDS.yMax) {
@@ -785,32 +722,27 @@
         }
       }
 
-      // 2. Cámara inferior de la PSU de ancho completo:
-      // La cubierta en psuTopY sostiene los 3 ventiladores inferiores (B1, B2, B3).
       for (let i = CASE_BOUNDS.xMin; i <= CASE_BOUNDS.xMax; i++) {
         solid[IX(i, CASE_BOUNDS.psuTopY)] = 1;
       }
-      // Abrimos el paso en la cubierta de la PSU para cada uno de los 3 ventiladores inferiores (B1, B2, B3)
       fans.filter(f => f.zone === 'bottom').forEach(bf => {
         for (let i = bf.gxStart; i <= bf.gxEnd; i++) {
-          solid[IX(i, CASE_BOUNDS.psuTopY)] = 2; // Paso poroso de ventilador / rejilla sobre PSU
+          solid[IX(i, CASE_BOUNDS.psuTopY)] = 2;
           solid[IX(i, CASE_BOUNDS.psuTopY - 1)] = 0;
           solid[IX(i, CASE_BOUNDS.psuTopY + 1)] = 0;
         }
       });
 
-      // El bloque físico de la fuente ATX está alojado abajo a la izquierda dentro del túnel, pero el resto de la base es malla abierta
       for (let j = CASE_BOUNDS.psuTopY + 3; j <= CASE_BOUNDS.yMax; j++) {
         for (let i = CASE_BOUNDS.xMin; i <= CASE_BOUNDS.xMax; i++) {
           if (i < CASE_BOUNDS.xMin + 16 && j > CASE_BOUNDS.psuTopY + 4) {
-            solid[IX(i, j)] = 1; // Cuerpo interno de la fuente de poder
+            solid[IX(i, j)] = 1;
           } else {
-            solid[IX(i, j)] = 2; // Cámara inferior con paneles laterales/frontales mallados (entra aire fresco libremente)
+            solid[IX(i, j)] = 2;
           }
         }
       }
 
-      // 3. Aberturas de ventiladores Superiores, Trasero y Frontales (solo si está en modo Frontal Mesh)
       fans.forEach(f => {
         if (f.zone === 'top') {
           for (let i = f.gxStart; i <= f.gxEnd; i++) {
@@ -824,13 +756,11 @@
           }
         } else if (f.zone === 'front') {
           if (simState.frontMountMode === 'front') {
-            // Modo Frontal Mesh: abrimos el frente
             for (let j = f.gyStart; j <= f.gyEnd; j++) {
               solid[IX(CASE_BOUNDS.xMax, j)] = 0;
               solid[IX(CASE_BOUNDS.xMax - 1, j)] = 0;
             }
           } else {
-            // Modo Acuario: el panel frontal (xMax) es Cristal Templado SÓLIDO
             for (let j = CASE_BOUNDS.yMin; j <= CASE_BOUNDS.psuTopY; j++) {
               solid[IX(CASE_BOUNDS.xMax, j)] = 1;
             }
@@ -838,27 +768,23 @@
         }
       });
 
-      // Ranuras PCIe traseras ventiladas
       for (let j = 30; j < CASE_BOUNDS.psuTopY - 2; j += 2) {
         solid[IX(CASE_BOUNDS.xMin, j)] = 0;
       }
 
-      // 4. Tarjeta Gráfica (GPU)
       const { gpuRect, cpuRect } = getHardwareRects();
       for (let j = gpuRect.y1; j <= gpuRect.y2; j++) {
         for (let i = gpuRect.x1; i <= gpuRect.x2; i++) {
-          // El extremo derecho del disipador de la GPU permite paso de aire "flow-through" entre aletas
           if (j === gpuRect.y1 && i < gpuRect.x2 - 8) {
-            solid[IX(i, j)] = 1; // PCB y Backplate sólido
+            solid[IX(i, j)] = 1;
           } else if (i < gpuRect.x2 - 9) {
-            solid[IX(i, j)] = 1; // Núcleo y disipador denso
+            solid[IX(i, j)] = 1;
           } else {
-            solid[IX(i, j)] = 2; // Extremo derecho flow-through (deja pasar parte del aire de B3 y F3)
+            solid[IX(i, j)] = 2;
           }
         }
       }
 
-      // 5. Disipador de CPU
       for (let j = cpuRect.y1; j <= cpuRect.y2; j++) {
         for (let i = cpuRect.x1; i <= cpuRect.x2; i++) {
           if (simState.cpuCoolerType === 'tower') {
@@ -874,7 +800,6 @@
               solid[IX(i, j)] = 2;
             }
           } else {
-            // Bomba AIO: el aire pasa por encima del bloque sin obstrucción pesada
             solid[IX(i, j)] = 2;
           }
         }
@@ -895,7 +820,7 @@
     function applyBoundaryAndSources() {
       const { gpuRect, cpuRect } = getHardwareRects();
 
-      // 1. Mantener aire fresco ambiente en el exterior y en la cámara inferior mallada (bajo los 3 ventiladores inferiores)
+      // Frontera exterior y reposición con aire ambiente
       for (let j = 1; j <= NY; j++) {
         for (let i = 1; i <= NX; i++) {
           const idx = IX(i, j);
@@ -907,7 +832,7 @@
         }
       }
 
-      // 2. Aplicar fuerzas e inyección de aire de cada uno de los 10 ventiladores
+      // Inyección de momento y temperatura por ventiladores
       let totalIntake = 0;
       let totalExhaust = 0;
 
@@ -922,7 +847,6 @@
         const dirSign = fan.mode === 'intake' ? 1 : -1;
 
         if (fan.zone === 'bottom') {
-          // 3 Ventiladores inferiores montados encima del nivel de la PSU (soplan verticalmente hacia arriba en Intake)
           const vy = -speed * dirSign;
           for (let i = fan.gxStart; i <= fan.gxEnd; i++) {
             for (let offset = -2; offset <= 1; offset++) {
@@ -938,9 +862,7 @@
             }
           }
         } else if (fan.zone === 'front' && simState.frontMountMode === 'aquarium') {
-          // Modo Lateral "Acuario" (Cristal Templado Frontal):
-          // Los ventiladores están en la pared lateral derecha. Al entrar el aire perpendicularmente y chocar con el cristal frontal,
-          // el flujo se redirige hacia el interior izquierdo (-X) y ligeramente en abanico vertical.
+          // Deflexión de flujo para entrada lateral con panel frontal cerrado
           const centerY = (fan.gyStart + fan.gyEnd) * 0.5;
           for (let j = fan.gyStart; j <= fan.gyEnd; j++) {
             for (let i = fan.gxStart; i <= fan.gxEnd; i++) {
@@ -993,7 +915,7 @@
       simState.intakeCFM = totalIntake;
       simState.exhaustCFM = totalExhaust;
 
-      // 3. Empuje del ventilador del disipador de CPU por aire
+      // Disipador por aire (CPU)
       if (simState.cpuCoolerType === 'tower') {
         for (let j = cpuRect.y1 + 1; j <= cpuRect.y2 - 1; j++) {
           u[IX(cpuRect.x2 + 1, j)] -= 0.35;
@@ -1001,7 +923,7 @@
         }
       }
 
-      // 4. Succión propia de los ventiladores de la GPU (toman el aire que asciende desde la zona inferior)
+      // Succión e impulsión de ventiladores de la GPU
       for (let i = gpuRect.x1 + 2; i <= gpuRect.x2 - 2; i++) {
         const belowIdx = IX(i, gpuRect.y2 + 1);
         const aboveIdx = IX(i, gpuRect.y1 - 1);
@@ -1009,7 +931,6 @@
           v[belowIdx] -= 0.38 * simState.thermalLoad;
         }
         if (solid[aboveIdx] !== 1) {
-          // El extremo derecho flow-through deja subir el aire directo hacia la parte superior
           if (i >= gpuRect.x2 - 9) {
             v[aboveIdx] -= 0.42 * simState.thermalLoad;
           } else {
@@ -1018,7 +939,7 @@
         }
       }
 
-      // 5. Zonas Térmicas (GPU y CPU)
+      // Disipación térmica de componentes
       const load = simState.thermalLoad;
       if (simState.showThermal) {
         for (let j = gpuRect.y1 - 2; j <= gpuRect.y2 + 1; j++) {
@@ -1523,7 +1444,7 @@
 
       ctx.save();
 
-      // 1. Placa Base (Motherboard ATX)
+      // Placa base
       const moboX = (CASE_BOUNDS.xMin + 2) * scaleX;
       const moboY = (CASE_BOUNDS.yMin + 4) * scaleY;
       const moboW = 37 * scaleX;
@@ -1536,20 +1457,19 @@
       ctx.fill();
       ctx.stroke();
 
-      // Ranuras RAM ARGB a la derecha del socket CPU
       for (let r = 0; r < 4; r++) {
         ctx.fillStyle = r % 2 === 0 ? 'rgba(56, 189, 248, 0.55)' : 'rgba(168, 85, 247, 0.55)';
         ctx.fillRect((42 + r * 1.05) * scaleX, 16 * scaleY, 0.65 * scaleX, 11.5 * scaleY);
       }
 
-      // 2. Si está en modo Acuario, dibujamos primero los ventiladores laterales al fondo en la bandeja derecha
+      // Ventiladores laterales en modo acuario
       if (simState.frontMountMode === 'aquarium') {
         fans.filter(f => f.zone === 'front').forEach(fan => {
           drawFanUnit(fan, scaleX, scaleY);
         });
       }
 
-      // 3. Cámara Inferior de la PSU de Ancho Completo con Malla Perforada:
+      // Cámara inferior de la PSU
       const psuX = CASE_BOUNDS.xMin * scaleX;
       const psuY = CASE_BOUNDS.psuTopY * scaleY;
       const psuW = (CASE_BOUNDS.xMax - CASE_BOUNDS.xMin) * scaleX;
@@ -1566,7 +1486,6 @@
       ctx.fill();
       ctx.stroke();
 
-      // Textura de malla metálica fina (mesh) en toda la cámara inferior como el gabinete de la imagen
       ctx.fillStyle = 'rgba(9, 13, 22, 0.72)';
       for (let py = psuY + 12; py < psuY + psuH - 6; py += 5) {
         for (let px = psuX + 10; px < psuX + psuW - 10; px += 6) {
@@ -1574,7 +1493,7 @@
         }
       }
 
-      // Panel I/O lateral integrado en la cámara de la PSU
+      // Panel I/O lateral
       const ioW = 86;
       const ioH = 22;
       const ioX = psuX + psuW * 0.42;
@@ -1586,7 +1505,7 @@
       ctx.roundRect(ioX, ioY, ioW, ioH, 3);
       ctx.fill();
       ctx.stroke();
-      // Botones del panel I/O
+
       ctx.fillStyle = '#0f172a';
       ctx.fillRect(ioX + 10, ioY + 8, 8, 5);
       ctx.fillRect(ioX + 24, ioY + 7, 12, 7);
@@ -1601,7 +1520,7 @@
       ctx.textAlign = 'left';
       ctx.fillText('PSU CHAMBER', psuX + 14, psuY + psuH - 10);
 
-      // 4. Radiador Superior (bajo los ventiladores del techo)
+      // Radiador superior (AIO)
       if (simState.cpuCoolerType === 'aio') {
         const radX = 19 * scaleX;
         const radY = (CASE_BOUNDS.yMin + 0.6) * scaleY;
@@ -1616,7 +1535,7 @@
         ctx.stroke();
       }
 
-      // 5. Disipador de CPU (Torre o Bomba AIO Espejo Infinito + Tubos)
+      // Disipador de CPU
       const cpuX = cpuRect.x1 * scaleX;
       const cpuY = cpuRect.y1 * scaleY;
       const cpuW = (cpuRect.x2 - cpuRect.x1) * scaleX;
@@ -1636,7 +1555,6 @@
       }
 
       if (simState.cpuCoolerType === 'aio') {
-        // Dibujo de bomba circular con anillos espejo infinito ARGB
         const pumpCx = cpuX + cpuW / 2;
         const pumpCy = cpuY + cpuH / 2;
         const pumpR = Math.max(cpuW, cpuH) * 0.56;
@@ -1655,7 +1573,6 @@
         ctx.arc(pumpCx, pumpCy, pumpR * 0.72, 0, Math.PI * 2);
         ctx.stroke();
 
-        // Tubos mallados del AIO subiendo hacia el radiador superior derecho
         ctx.strokeStyle = '#1e293b';
         ctx.lineWidth = 5;
         ctx.beginPath();
@@ -1689,7 +1606,7 @@
       ctx.textAlign = 'center';
       ctx.fillText(`${simState.cpuTempEst.toFixed(1)}°C`, cpuX + cpuW / 2, cpuY + cpuH / 2 + 4);
 
-      // 6. Tarjeta Gráfica (GPU) — Situada encima de los 3 ventiladores inferiores de la PSU
+      // Tarjeta Gráfica (GPU)
       const gpuX = gpuRect.x1 * scaleX;
       const gpuY = gpuRect.y1 * scaleY;
       const gpuW = (gpuRect.x2 - gpuRect.x1) * scaleX;
@@ -1717,7 +1634,6 @@
       ctx.fill();
       ctx.stroke();
 
-      // Acento estético en el borde del disipador de la GPU
       const rgbGrad = ctx.createLinearGradient(gpuX + gpuW - 45, gpuY, gpuX + gpuW, gpuY + gpuH);
       rgbGrad.addColorStop(0, '#38bdf8');
       rgbGrad.addColorStop(0.5, '#818cf8');
@@ -1726,7 +1642,6 @@
       ctx.fillRect(gpuX + gpuW - 42, gpuY + 1, 40, 2);
       ctx.fillRect(gpuX + gpuW - 42, gpuY + gpuH - 3, 40, 2);
 
-      // Aletas verticales del disipador GPU
       ctx.strokeStyle = 'rgba(148, 163, 184, 0.38)';
       ctx.lineWidth = 1;
       for (let gx = gpuX + 8; gx < gpuX + gpuW - 6; gx += 5) {
@@ -1745,7 +1660,7 @@
         gpuY + gpuH / 2 + 4
       );
 
-      // 7. Marco Estructural del Chasis y Cristal Templado Frontal si está en Modo Acuario
+      // Marco del chasis y cristal frontal
       ctx.strokeStyle = '#475569';
       ctx.lineWidth = 3.5;
       ctx.beginPath();
@@ -1753,7 +1668,6 @@
       ctx.stroke();
 
       if (simState.frontMountMode === 'aquarium') {
-        // Columna de Cristal Templado Frontal Panorámico (bloquea el frente y desvía el aire lateral)
         const glassX = CASE_BOUNDS.xMax * scaleX - 3;
         const glassY = CASE_BOUNDS.yMin * scaleY;
         const glassH = (CASE_BOUNDS.psuTopY - CASE_BOUNDS.yMin) * scaleY;
@@ -1765,14 +1679,12 @@
         ctx.fillRect(glassX, glassY, 6, glassH);
       }
 
-      // Patas inferiores elevadas del gabinete
       ctx.fillStyle = '#334155';
       ctx.beginPath();
       ctx.roundRect(caseX + 18, caseY + caseH, 42, 10, 3);
       ctx.roundRect(caseX + caseW - 60, caseY + caseH, 42, 10, 3);
       ctx.fill();
 
-      // Etiquetas superiores del chasis
       ctx.fillStyle = 'rgba(148, 163, 184, 0.8)';
       ctx.font = '600 10px "JetBrains Mono", monospace';
       ctx.textAlign = 'left';
@@ -1786,9 +1698,9 @@
         caseY - 8
       );
 
-      // 8. Dibujar el resto de los Ventiladores (3 Inferiores sobre la PSU, 3 Superiores, 1 Trasero, y Frontales si es modo Mesh)
+      // Ventiladores principales
       fans.forEach(fan => {
-        if (fan.zone === 'front' && simState.frontMountMode === 'aquarium') return; // Ya dibujados en la bandeja lateral detrás de la GPU
+        if (fan.zone === 'front' && simState.frontMountMode === 'aquarium') return;
         drawFanUnit(fan, scaleX, scaleY);
       });
 
@@ -1801,7 +1713,6 @@
       const borderColor = !fan.enabled ? '#334155' : activeColor;
       const fillAlpha = !fan.enabled ? 'rgba(15, 23, 42, 0.72)' : (isIntake ? 'rgba(14, 165, 233, 0.24)' : 'rgba(244, 63, 94, 0.24)');
 
-      // Caso especial: Ventiladores derechos en Modo Lateral "Acuario"
       if (fan.zone === 'front' && simState.frontMountMode === 'aquarium') {
         const rx = fan.gxStart * scaleX;
         const ry = fan.gyStart * scaleY;
@@ -1814,7 +1725,6 @@
         fan._hitBox = { x: rx - 4, y: ry - 4, w: rw + 8, h: rh + 8 };
 
         ctx.save();
-        // Marco cuadrado del ventilador lateral 120mm
         ctx.fillStyle = 'rgba(15, 23, 42, 0.82)';
         ctx.strokeStyle = fan.enabled ? 'rgba(148, 163, 184, 0.45)' : 'rgba(51, 65, 85, 0.4)';
         ctx.lineWidth = 1.2;
@@ -1823,7 +1733,6 @@
         ctx.fill();
         ctx.stroke();
 
-        // Anillo ARGB iluminado
         ctx.strokeStyle = borderColor;
         ctx.fillStyle = fillAlpha;
         ctx.lineWidth = fan.enabled ? 2.4 : 1.2;
@@ -1846,7 +1755,6 @@
           }
         }
 
-        // Centro del rotor y etiqueta
         ctx.fillStyle = '#090d16';
         ctx.beginPath();
         ctx.arc(cx, cy, radius * 0.28, 0, Math.PI * 2);
@@ -1860,7 +1768,7 @@
         return;
       }
 
-      // Dibujo estándar de perfil para ventiladores inferiores sobre PSU (B1, B2, B3), superiores (T1, T2, T3), trasero (R1) y frontales en modo Mesh
+      // Perfil de ventilador
       let rx, ry, rw, rh, cx, cy;
       if (fan.orientation === 'vertical') {
         rw = 14;
@@ -2141,7 +2049,6 @@
     }
 
     function setupUIEvents() {
-      // Selector de Modo Acuario (Lateral + Cristal) vs Frontal Mesh
       document.querySelectorAll('.mount-mode-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           simState.frontMountMode = btn.dataset.mountmode;
@@ -2151,7 +2058,6 @@
         });
       });
 
-      // Deslizador de Altura de Cubierta PSU y 3 Ventiladores Inferiores
       document.getElementById('sliderPsuHeight').addEventListener('input', (e) => {
         const val = parseInt(e.target.value, 10);
         simState.psuTopY = val;
@@ -2160,7 +2066,6 @@
         rebuildSolidGrid();
       });
 
-      // Deslizador de Altura de Ventiladores Laterales / Frontales
       document.getElementById('sliderRightFansY').addEventListener('input', (e) => {
         const val = parseInt(e.target.value, 10);
         simState.rightFansOffsetY = val;
@@ -2169,7 +2074,6 @@
         rebuildSolidGrid();
       });
 
-      // Deslizador de Altura de Ventilador Trasero (R1)
       document.getElementById('sliderRearFanY').addEventListener('input', (e) => {
         const val = parseInt(e.target.value, 10);
         simState.rearFanY = val;
@@ -2177,7 +2081,6 @@
         rebuildSolidGrid();
       });
 
-      // Pestañas de zonas de ventiladores
       document.querySelectorAll('.zone-tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           simState.activeZoneTab = btn.dataset.zone;
@@ -2191,7 +2094,6 @@
         });
       });
 
-      // Botones de Perfiles Preconfigurados
       document.querySelectorAll('.preset-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           applyFanPreset(btn.dataset.preset);
@@ -2204,7 +2106,6 @@
         });
       });
 
-      // Botones de Longitud de GPU (200mm, 280mm, 340mm)
       document.querySelectorAll('.gpu-len-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           simState.gpuLengthMm = parseInt(btn.dataset.gpulen, 10);
@@ -2220,7 +2121,6 @@
         });
       });
 
-      // Deslizador de posición vertical de la GPU
       const sliderGpuY = document.getElementById('sliderGpuY');
       sliderGpuY.addEventListener('input', (e) => {
         simState.gpuSlotPos = parseInt(e.target.value, 10);
@@ -2229,7 +2129,6 @@
         rebuildSolidGrid();
       });
 
-      // Selector de tipo de CPU Cooler
       document.querySelectorAll('.cpu-cooler-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           simState.cpuCoolerType = btn.dataset.cpucooler;
@@ -2243,7 +2142,6 @@
         });
       });
 
-      // Deslizador de Carga Térmica
       document.getElementById('sliderThermalLoad').addEventListener('input', (e) => {
         const val = parseInt(e.target.value, 10);
         simState.thermalLoad = val / 100;
@@ -2251,7 +2149,6 @@
         document.getElementById('thermalLoadLabel').textContent = `${val}% (${modeTxt})`;
       });
 
-      // Botones superiores de Capas de Visualización
       const btnToggleParticles = document.getElementById('btnToggleParticles');
       btnToggleParticles.addEventListener('click', () => {
         simState.showParticles = !simState.showParticles;
