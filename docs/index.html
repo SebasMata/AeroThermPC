@@ -315,7 +315,21 @@
 
           <div>
             <div class="flex justify-between text-xs mb-1">
-              <label for="sliderPsuHeight" class="text-slate-300 font-medium">Altura Nivel PSU y 3 Ventiladores Inferiores:</label>
+              <label for="sliderCaseWidth" class="text-slate-300 font-medium">Profundidad del Gabinete (Ancho Horizontal):</label>
+              <span id="caseWidthLabel" class="font-mono-tech text-sky-400">~504 mm (Estándar)</span>
+            </div>
+            <input id="sliderCaseWidth" type="range" min="52" max="88" value="72" class="w-full" />
+            <div class="flex justify-between text-[10px] text-slate-500 font-mono-tech mt-0.5">
+              <span>Compacto</span>
+              <span>Estándar</span>
+              <span>Amplio</span>
+            </div>
+            <p id="caseWidthWarning" class="hidden text-[11px] text-amber-400 mt-1"></p>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <label for="sliderPsuHeight" class="text-slate-300 font-medium">Altura Nivel PSU y Ventiladores Inferiores:</label>
               <span id="psuHeightLabel" class="font-mono-tech text-emerald-400">Nivel Estándar (Base Malla)</span>
             </div>
             <input id="sliderPsuHeight" type="range" min="45" max="55" value="50" class="w-full" />
@@ -331,12 +345,13 @@
               <label for="sliderRightFansY" class="text-slate-300 font-medium">Altura Ventiladores Laterales / Frontales:</label>
               <span id="rightFansYLabel" class="font-mono-tech text-sky-400">+2 (Alineado con PSU)</span>
             </div>
-            <input id="sliderRightFansY" type="range" min="-4" max="6" value="2" class="w-full" />
+            <input id="sliderRightFansY" type="range" min="-4" max="14" value="2" class="w-full" />
             <div class="flex justify-between text-[10px] text-slate-500 font-mono-tech mt-0.5">
               <span>Más Arriba (Hacia Techo)</span>
               <span>Centro</span>
               <span>Más Abajo (Pegados a PSU)</span>
             </div>
+            <p id="rightFansWarning" class="hidden text-[11px] text-amber-400 mt-1"></p>
           </div>
 
           <div>
@@ -464,9 +479,13 @@
     /***************************************************************************
      * 1. DEFINICIÓN DE PARÁMETROS DEL SOLVER DE FLUIDOS (NAVIER-STOKES 2D)
      ***************************************************************************/
-    const NX = 96;
+    const NX = 104;
     const NY = 72;
     const SIZE = (NX + 2) * (NY + 2);
+
+    // Escala aproximada de conversión entre celdas de la grilla y milímetros reales
+    const MM_PER_CELL = 7;
+    const FAN_CELLS = 17;
 
     const CASE_BOUNDS = {
       xMin: 12,
@@ -486,6 +505,7 @@
       particleColorMode: 'thermal',
       activeZoneTab: 'bottom',
       frontMountMode: 'aquarium',
+      caseWidth: 72,
       psuTopY: 50,
       rightFansOffsetY: 2,
       rearFanY: 16,
@@ -578,30 +598,83 @@
       }
     ];
 
+    function isFanActive(fan) {
+      return fan.enabled && fan.fits !== false;
+    }
+
+    // Distribuye una fila de ventiladores a lo largo del tramo disponible;
+    // los que no caben se marcan con fits = false (el más frontal se descarta primero).
+    function layoutFanRow(rowFans, spanStart, spanEnd) {
+      const span = spanEnd - spanStart;
+      const count = Math.max(0, Math.min(rowFans.length, Math.floor((span + 3) / (FAN_CELLS + 3))));
+      const segment = count > 0 ? span / count : 0;
+      rowFans.forEach((fan, idx) => {
+        fan.fits = idx < count;
+        if (!fan.fits) return;
+        const center = spanStart + (idx + 0.5) * segment;
+        fan.gxStart = Math.round(center - FAN_CELLS / 2);
+        fan.gxEnd = fan.gxStart + FAN_CELLS;
+      });
+    }
+
+    function layoutFrontFans() {
+      const frontFans = fans.filter(f => f.zone === 'front');
+      const f1 = frontFans.find(f => f.id === 'F1');
+      const f2 = frontFans.find(f => f.id === 'F2');
+      const f3 = frontFans.find(f => f.id === 'F3');
+
+      const psuFloor = CASE_BOUNDS.psuTopY - 1;
+      const topCeiling = CASE_BOUNDS.yMin + 2;
+
+      // F3 queda sin espacio si al bajar los ventiladores penetra la cubierta de la PSU o se encima con F2
+      const targetF3End = 47 + simState.rightFansOffsetY;
+      const f3Fits = targetF3End <= psuFloor;
+
+      if (f1) f1.fits = true;
+      if (f2) f2.fits = true;
+      if (f3) f3.fits = f3Fits;
+
+      const activeGroup = f3Fits ? [f1, f2, f3].filter(Boolean) : [f1, f2].filter(Boolean);
+      const totalHeight = activeGroup.length * 10 + (activeGroup.length - 1) * 2;
+
+      let startY = 13 + simState.rightFansOffsetY;
+      let endY = startY + totalHeight;
+
+      if (endY > psuFloor) {
+        endY = psuFloor;
+        startY = endY - totalHeight;
+      }
+      if (startY < topCeiling) {
+        startY = topCeiling;
+      }
+
+      let curY = startY;
+      activeGroup.forEach(fan => {
+        fan.gyStart = curY;
+        fan.gyEnd = curY + 10;
+        curY += 12;
+      });
+
+      frontFans.forEach(fan => {
+        fan.gx = simState.frontMountMode === 'aquarium' ? (CASE_BOUNDS.xMax - 8) : CASE_BOUNDS.xMax;
+        fan.gxStart = CASE_BOUNDS.xMax - 14;
+        fan.gxEnd = CASE_BOUNDS.xMax - 3;
+      });
+    }
+
     function syncDynamicFanPositions() {
       CASE_BOUNDS.psuTopY = simState.psuTopY;
+      CASE_BOUNDS.xMax = CASE_BOUNDS.xMin + simState.caseWidth;
+
+      layoutFanRow(fans.filter(f => f.zone === 'bottom'), CASE_BOUNDS.xMin + 4, CASE_BOUNDS.xMax - 11);
+      layoutFanRow(fans.filter(f => f.zone === 'top'), CASE_BOUNDS.xMin + 8, CASE_BOUNDS.xMax - 7);
+      layoutFrontFans();
 
       fans.forEach(fan => {
         if (fan.zone === 'bottom') {
           fan.gy = CASE_BOUNDS.psuTopY - 1;
-        } else if (fan.zone === 'front') {
-          const span = fan.baseGyEnd - fan.baseGyStart;
-          let newStart = fan.baseGyStart + simState.rightFansOffsetY;
-          let newEnd = newStart + span;
-          if (newEnd > CASE_BOUNDS.psuTopY - 1) {
-            newEnd = CASE_BOUNDS.psuTopY - 1;
-            newStart = newEnd - span;
-          }
-          if (newStart < CASE_BOUNDS.yMin + 2) {
-            newStart = CASE_BOUNDS.yMin + 2;
-            newEnd = newStart + span;
-          }
-          fan.gyStart = newStart;
-          fan.gyEnd = newEnd;
-
-          fan.gx = simState.frontMountMode === 'aquarium' ? (CASE_BOUNDS.xMax - 8) : CASE_BOUNDS.xMax;
-          fan.gxStart = CASE_BOUNDS.xMax - 14;
-          fan.gxEnd = CASE_BOUNDS.xMax - 3;
+        } else if (fan.zone === 'top') {
+          fan.gy = CASE_BOUNDS.yMin;
         } else if (fan.zone === 'rear') {
           fan.gyStart = simState.rearFanY;
           fan.gyEnd = Math.min(CASE_BOUNDS.psuTopY - 3, simState.rearFanY + 12);
@@ -638,7 +711,7 @@
         x = CASE_BOUNDS.xMin + 2 + Math.random() * (CASE_BOUNDS.xMax - CASE_BOUNDS.xMin - 4);
         y = CASE_BOUNDS.yMin + 2 + Math.random() * (CASE_BOUNDS.psuTopY - CASE_BOUNDS.yMin - 3);
       } else {
-        const activeIntakes = fans.filter(f => f.enabled && f.mode === 'intake');
+        const activeIntakes = fans.filter(f => isFanActive(f) && f.mode === 'intake');
         if (activeIntakes.length > 0 && Math.random() < 0.86) {
           const fan = activeIntakes[Math.floor(Math.random() * activeIntakes.length)];
           if (fan.zone === 'bottom') {
@@ -691,11 +764,14 @@
       const minGpuTopY = 29;
       const gpuY = Math.round(minGpuTopY + (simState.gpuSlotPos / 100) * Math.max(2, maxGpuTopY - minGpuTopY));
 
+      const gpuX1 = CASE_BOUNDS.xMin + 3;
+      const gpuMaxX2 = CASE_BOUNDS.xMax - 3;
       const gpuRect = {
-        x1: CASE_BOUNDS.xMin + 3,
-        x2: CASE_BOUNDS.xMin + 3 + gpuCellsWidth,
+        x1: gpuX1,
+        x2: Math.min(gpuX1 + gpuCellsWidth, gpuMaxX2),
         y1: gpuY,
-        y2: gpuY + 5
+        y2: gpuY + 5,
+        clipped: gpuX1 + gpuCellsWidth > gpuMaxX2
       };
 
       let cpuRect;
@@ -725,7 +801,7 @@
       for (let i = CASE_BOUNDS.xMin; i <= CASE_BOUNDS.xMax; i++) {
         solid[IX(i, CASE_BOUNDS.psuTopY)] = 1;
       }
-      fans.filter(f => f.zone === 'bottom').forEach(bf => {
+      fans.filter(f => f.zone === 'bottom' && f.fits !== false).forEach(bf => {
         for (let i = bf.gxStart; i <= bf.gxEnd; i++) {
           solid[IX(i, CASE_BOUNDS.psuTopY)] = 2;
           solid[IX(i, CASE_BOUNDS.psuTopY - 1)] = 0;
@@ -744,6 +820,7 @@
       }
 
       fans.forEach(f => {
+        if (f.fits === false) return;
         if (f.zone === 'top') {
           for (let i = f.gxStart; i <= f.gxEnd; i++) {
             solid[IX(i, CASE_BOUNDS.yMin)] = 0;
@@ -837,7 +914,7 @@
       let totalExhaust = 0;
 
       fans.forEach(fan => {
-        if (!fan.enabled || fan.rpm <= 0) return;
+        if (!isFanActive(fan) || fan.rpm <= 0) return;
 
         const cfm = rpmToCFM(fan.rpm);
         if (fan.mode === 'intake') totalIntake += cfm;
@@ -1190,7 +1267,7 @@
       const avgGpuAirTemp = gpuSamples > 0 ? gpuTempSum / gpuSamples : simState.ambientTemp;
 
       // Bonificación adicional si el radiador AIO tiene ventiladores superiores activos
-      const activeTopFans = fans.filter(f => f.zone === 'top' && f.enabled).length;
+      const activeTopFans = fans.filter(f => f.zone === 'top' && isFanActive(f)).length;
       const coolerBonus = simState.cpuCoolerType === 'aio'
         ? (-5.5 - activeTopFans * 1.4)
         : (simState.cpuCoolerType === 'tower' ? 0 : +7.5);
@@ -1254,6 +1331,13 @@
 
       canvas.width = Math.max(640, Math.floor(w));
       canvas.height = Math.max(480, Math.floor(h));
+    }
+
+    // Desplazamiento horizontal (px) para mantener el gabinete centrado en el lienzo
+    function getViewOffsetPx() {
+      const scaleX = canvas.width / (NX + 2);
+      const caseCenter = (CASE_BOUNDS.xMin + CASE_BOUNDS.xMax) / 2;
+      return ((NX + 2) / 2 - caseCenter) * scaleX;
     }
 
     function tempToRGB(t) {
@@ -1520,11 +1604,14 @@
       ctx.textAlign = 'left';
       ctx.fillText('PSU CHAMBER', psuX + 14, psuY + psuH - 10);
 
-      // Radiador superior (AIO)
+      // Radiador superior (AIO), cubre los ventiladores superiores que caben
+      const fittedTopFans = fans.filter(f => f.zone === 'top' && f.fits !== false);
+      const radStartCell = fittedTopFans.length ? Math.min(...fittedTopFans.map(f => f.gxStart)) - 1 : CASE_BOUNDS.xMin + 7;
+      const radEndCell = fittedTopFans.length ? Math.max(...fittedTopFans.map(f => f.gxEnd)) + 1 : CASE_BOUNDS.xMax - 6;
       if (simState.cpuCoolerType === 'aio') {
-        const radX = 19 * scaleX;
+        const radX = radStartCell * scaleX;
         const radY = (CASE_BOUNDS.yMin + 0.6) * scaleY;
-        const radW = 59 * scaleX;
+        const radW = (radEndCell - radStartCell) * scaleX;
         const radH = 2.6 * scaleY;
         ctx.fillStyle = '#0f172a';
         ctx.strokeStyle = '#475569';
@@ -1573,11 +1660,12 @@
         ctx.arc(pumpCx, pumpCy, pumpR * 0.72, 0, Math.PI * 2);
         ctx.stroke();
 
+        const tubeEndCell = Math.max(radStartCell + 6, radEndCell - 14);
         ctx.strokeStyle = '#1e293b';
         ctx.lineWidth = 5;
         ctx.beginPath();
         ctx.moveTo(pumpCx + pumpR * 0.7, pumpCy);
-        ctx.bezierCurveTo(pumpCx + 95, pumpCy + 10, 62 * scaleX, 18 * scaleY, 64 * scaleX, (CASE_BOUNDS.yMin + 3) * scaleY);
+        ctx.bezierCurveTo(pumpCx + 95, pumpCy + 10, (tubeEndCell - 2) * scaleX, 18 * scaleY, tubeEndCell * scaleX, (CASE_BOUNDS.yMin + 3) * scaleY);
         ctx.stroke();
         ctx.strokeStyle = '#475569';
         ctx.lineWidth = 1.5;
@@ -1651,11 +1739,11 @@
         ctx.stroke();
       }
 
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = gpuRect.clipped ? '#fbbf24' : '#ffffff';
       ctx.font = '700 11px "JetBrains Mono", monospace';
       ctx.textAlign = 'left';
       ctx.fillText(
-        `GPU (${simState.gpuLengthMm}mm)  •  ${simState.gpuTempEst.toFixed(1)}°C`,
+        `GPU (${simState.gpuLengthMm}mm${gpuRect.clipped ? ' ⚠ no cabe' : ''})  •  ${simState.gpuTempEst.toFixed(1)}°C`,
         gpuX + 10,
         gpuY + gpuH / 2 + 4
       );
@@ -1688,12 +1776,12 @@
       ctx.fillStyle = 'rgba(148, 163, 184, 0.8)';
       ctx.font = '600 10px "JetBrains Mono", monospace';
       ctx.textAlign = 'left';
-      ctx.fillText('◀ PANEL TRASERO (REAR)', caseX + 8, caseY - 8);
+      ctx.fillText('◀ TRASERO (REAR)', caseX + 8, caseY - 8);
       ctx.textAlign = 'right';
       ctx.fillText(
         simState.frontMountMode === 'aquarium'
-          ? 'MODO ACUARIO: CRISTAL FRONTAL + FANS LATERALES ▶'
-          : 'MODO CLÁSICO: PANEL FRONTAL MESH ▶',
+          ? 'ACUARIO: CRISTAL + FANS LATERALES ▶'
+          : 'CLÁSICO: FRONTAL MESH ▶',
         caseX + caseW - 8,
         caseY - 8
       );
@@ -1708,6 +1796,10 @@
     }
 
     function drawFanUnit(fan, scaleX, scaleY) {
+      if (fan.fits === false) {
+        fan._hitBox = null;
+        return;
+      }
       const isIntake = fan.mode === 'intake';
       const activeColor = isIntake ? '#38bdf8' : '#f43f5e';
       const borderColor = !fan.enabled ? '#334155' : activeColor;
@@ -1911,6 +2003,17 @@
       const zoneFans = fans.filter(f => f.zone === simState.activeZoneTab);
 
       container.innerHTML = zoneFans.map(fan => {
+        if (fan.fits === false) {
+          return `
+          <div class="p-3 rounded-lg bg-slate-950/60 border border-dashed border-slate-800 flex items-center justify-between gap-2 opacity-60">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 text-[11px] font-mono-tech font-bold rounded bg-slate-800 text-slate-500">${fan.id}</span>
+              <span class="text-xs font-semibold text-slate-400">${fan.name}</span>
+            </div>
+            <span class="text-[10px] font-mono-tech text-amber-400">${fan.zone === 'front' ? 'Sin espacio vertical' : 'No cabe en este gabinete'}</span>
+          </div>
+        `;
+        }
         const cfm = fan.enabled ? rpmToCFM(fan.rpm) : 0;
         const isIntake = fan.mode === 'intake';
         return `
@@ -1976,6 +2079,46 @@
       });
     }
 
+    function updateCaseWidthUI() {
+      const w = simState.caseWidth;
+      const desc = w < 64 ? 'Compacto' : (w <= 78 ? 'Estándar' : 'Amplio');
+      document.getElementById('caseWidthLabel').textContent = `~${w * MM_PER_CELL} mm (${desc})`;
+
+      const issues = [];
+      const missingHorizontal = fans.filter(f => (f.zone === 'top' || f.zone === 'bottom') && f.fits === false).map(f => f.id);
+      if (missingHorizontal.length) issues.push(`Ventiladores sin espacio horizontal: ${missingHorizontal.join(', ')}`);
+      if (getHardwareRects().gpuRect.clipped) issues.push(`la GPU de ${simState.gpuLengthMm} mm no cabe completa`);
+
+      const warnEl = document.getElementById('caseWidthWarning');
+      warnEl.textContent = issues.length ? `⚠ ${issues.join(' · ')}` : '';
+      warnEl.classList.toggle('hidden', issues.length === 0);
+    }
+
+    function updateRightFansYUI() {
+      const val = simState.rightFansOffsetY;
+      const sign = val > 0 ? `+${val}` : `${val}`;
+      const f3 = fans.find(f => f.id === 'F3');
+      const labelEl = document.getElementById('rightFansYLabel');
+      const warnEl = document.getElementById('rightFansWarning');
+
+      if (f3 && f3.fits === false) {
+        labelEl.textContent = `${sign} (2 Fans · F3 sin espacio)`;
+        labelEl.className = 'font-mono-tech text-amber-400 font-semibold';
+        if (warnEl) {
+          warnEl.textContent = '⚠ Sin espacio vertical para F3 sobre la cubierta PSU (configuración reducida a 2 ventiladores).';
+          warnEl.classList.remove('hidden');
+        }
+      } else {
+        const desc = val === 2 ? 'Alineado con PSU' : (val < 0 ? 'Más Arriba' : (val === 0 ? 'Centro' : 'Posición Media'));
+        labelEl.textContent = `${sign} (${desc})`;
+        labelEl.className = 'font-mono-tech text-sky-400';
+        if (warnEl) {
+          warnEl.textContent = '';
+          warnEl.classList.add('hidden');
+        }
+      }
+    }
+
     function updateMountModeUI() {
       document.querySelectorAll('.mount-mode-btn').forEach(btn => {
         const active = btn.dataset.mountmode === simState.frontMountMode;
@@ -2033,6 +2176,8 @@
 
       updateMountModeUI();
       rebuildSolidGrid();
+      updateRightFansYUI();
+      updateCaseWidthUI();
       renderFanControlsList();
     }
 
@@ -2058,20 +2203,30 @@
         });
       });
 
+      document.getElementById('sliderCaseWidth').addEventListener('input', (e) => {
+        simState.caseWidth = parseInt(e.target.value, 10);
+        rebuildSolidGrid();
+        updateCaseWidthUI();
+        renderFanControlsList();
+      });
+
       document.getElementById('sliderPsuHeight').addEventListener('input', (e) => {
         const val = parseInt(e.target.value, 10);
         simState.psuTopY = val;
         const label = val < 48 ? 'Cámara PSU Alta (Fans cerca de GPU)' : (val > 52 ? 'Cámara PSU Baja (Más espacio)' : 'Nivel Estándar (Base Malla)');
         document.getElementById('psuHeightLabel').textContent = label;
         rebuildSolidGrid();
+        updateRightFansYUI();
+        updateCaseWidthUI();
+        renderFanControlsList();
       });
 
       document.getElementById('sliderRightFansY').addEventListener('input', (e) => {
-        const val = parseInt(e.target.value, 10);
-        simState.rightFansOffsetY = val;
-        const sign = val > 0 ? `+${val}` : `${val}`;
-        document.getElementById('rightFansYLabel').textContent = `${sign} (${val >= 2 ? 'Alineado con PSU' : (val < 0 ? 'Más Arriba' : 'Centro')})`;
+        simState.rightFansOffsetY = parseInt(e.target.value, 10);
         rebuildSolidGrid();
+        updateRightFansYUI();
+        updateCaseWidthUI();
+        renderFanControlsList();
       });
 
       document.getElementById('sliderRearFanY').addEventListener('input', (e) => {
@@ -2118,6 +2273,7 @@
             }`;
           });
           rebuildSolidGrid();
+          updateCaseWidthUI();
         });
       });
 
@@ -2206,7 +2362,7 @@
         const rect = canvas.getBoundingClientRect();
         const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
         const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
-        const x = (clientX - rect.left) * (canvas.width / rect.width);
+        const x = (clientX - rect.left) * (canvas.width / rect.width) - getViewOffsetPx();
         const y = (clientY - rect.top) * (canvas.height / rect.height);
         const gx = (x / canvas.width) * (NX + 2);
         const gy = (y / canvas.height) * (NY + 2);
@@ -2324,10 +2480,13 @@
       }
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(getViewOffsetPx(), 0);
       renderHeatmapLayer();
       renderParticlesLayer();
       renderVelocityVectorsLayer();
       renderChassisAndHardware();
+      ctx.restore();
 
       requestAnimationFrame(animateLoop);
     }
@@ -2335,6 +2494,8 @@
     window.onload = function () {
       resizeCanvas();
       rebuildSolidGrid();
+      updateCaseWidthUI();
+      updateRightFansYUI();
       resetFluidFields();
       renderFanControlsList();
       setupUIEvents();
