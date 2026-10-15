@@ -390,7 +390,7 @@
           <div>
             <div class="flex justify-between text-xs mb-1.5">
               <span class="text-slate-300 font-medium">Longitud de Tarjeta Gráfica (GPU):</span>
-              <span id="gpuLengthLabel" class="font-mono-tech text-sky-400 font-semibold">340 mm (Grande / Triple Fan)</span>
+              <span id="gpuLengthLabel" class="font-mono-tech text-sky-400 font-semibold">340 mm (Grande)</span>
             </div>
             <div class="grid grid-cols-3 gap-1.5">
               <button data-gpulen="200" class="gpu-len-btn py-1.5 px-2 rounded-lg text-xs font-medium border bg-slate-950 border-slate-800 text-slate-400 hover:text-white transition">
@@ -422,7 +422,7 @@
           <!-- CPU Cooler Type -->
           <div>
             <div class="flex justify-between text-xs mb-1.5">
-              <span class="text-slate-300 font-medium">Disipador CPU (Torre vs. AIO Líquida como Foto):</span>
+              <span class="text-slate-300 font-medium">Tipo de Disipador CPU:</span>
             </div>
             <div class="grid grid-cols-3 gap-1.5">
               <button data-cpucooler="tower" class="cpu-cooler-btn py-1.5 px-2 rounded-lg text-xs font-medium border bg-slate-950 border-slate-800 text-slate-400 hover:text-white transition">
@@ -468,7 +468,7 @@
               Lat / Front (3)
             </button>
             <button data-zone="top" class="zone-tab-btn py-1.5 rounded text-[11px] font-semibold text-slate-400 hover:text-slate-200 border border-transparent transition">
-              Techo AIO (3)
+              Techo / Superior (3)
             </button>
             <button data-zone="rear" class="zone-tab-btn py-1.5 rounded text-[11px] font-semibold text-slate-400 hover:text-slate-200 border border-transparent transition">
               Trasero (1)
@@ -488,7 +488,7 @@
             <span id="diagBadge" class="text-[10px] font-mono-tech px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">ÓPTIMO</span>
           </div>
           <p id="diagSummaryText" class="text-xs text-slate-300 leading-relaxed">
-            Los 3 ventiladores sobre la cámara mallada de la PSU impulsan aire frío directo hacia la GPU, mientras que los ventiladores laterales de tipo Acuario alimentan el resto del chasis hacia el radiador superior.
+            Los ventiladores inferiores y frontales/laterales impulsan aire fresco hacia los componentes térmicos clave, mientras que los ventiladores superiores y traseros evacúan el calor del chasis.
           </p>
         </div>
 
@@ -534,7 +534,7 @@
       rearFanY: 16,                  // Posición Y superior del ventilador trasero R1 (11..28)
       ambientTemp: 24.0,             // °C
       thermalLoad: 0.80,             // 0.15 .. 1.0
-      gpuLengthMm: 340,              // 200 | 280 | 340 (Por defecto 340mm como la RTX grande de la foto)
+      gpuLengthMm: 340,              // 200 | 280 | 340 (Longitud GPU en mm)
       gpuSlotPos: 48,                // 0 (alta) a 100 (baja)
       cpuCoolerType: 'aio',          // 'tower' | 'lowprofile' | 'aio' 
       cpuTempEst: 54.0,
@@ -548,7 +548,7 @@
     // Configuración modular de los 10 ventiladores:
     // - 3 Inferiores encima del nivel de la PSU (B1, B2, B3)
     // - 3 Derechos que pueden ser Laterales tipo Acuario o Frontales Mesh (F1, F2, F3)
-    // - 3 Superiores en el techo / radiador AIO (T1, T2, T3)
+    // - 3 Superiores en el techo (T1, T2, T3)
     // - 1 Trasero (R1)
     const fans = [
       // ZONA SUELO / ENCIMA DE LA PSU (3 ventiladores horizontales montados sobre psuTopY)
@@ -575,8 +575,6 @@
       },
 
       // ZONA DERECHA: LATERALES (MODO ACUARIO) O FRONTALES (MODO MESH)
-      // En la foto de referencia hay 2 ventiladores laterales encendidos entre el radiador superior y la cubierta de la PSU,
-      // con opción a activar el 3ro superior si se desea.
       {
         id: 'F1', zone: 'front', name: 'Lateral/Frontal Superior (F1)',
         orientation: 'vertical', side: 'front',
@@ -602,23 +600,23 @@
         enabled: true, mode: 'intake', rpm: 1450
       },
 
-      // ZONA SUPERIOR / TECHO RADIADOR AIO 360mm (3 ventiladores en y = CASE_BOUNDS.yMin)
+      // ZONA SUPERIOR / TECHO (3 ventiladores en y = CASE_BOUNDS.yMin)
       {
-        id: 'T1', zone: 'top', name: 'Superior 1 - Trasero (AIO)',
+        id: 'T1', zone: 'top', name: 'Superior 1 - Trasero',
         orientation: 'horizontal', side: 'top',
         gy: CASE_BOUNDS.yMin, gxStart: 20, gxEnd: 37,
         inwardNormal: { x: 0, y: 1 },
         enabled: true, mode: 'exhaust', rpm: 1350
       },
       {
-        id: 'T2', zone: 'top', name: 'Superior 2 - Central (AIO)',
+        id: 'T2', zone: 'top', name: 'Superior 2 - Central',
         orientation: 'horizontal', side: 'top',
         gy: CASE_BOUNDS.yMin, gxStart: 40, gxEnd: 57,
         inwardNormal: { x: 0, y: 1 },
         enabled: true, mode: 'exhaust', rpm: 1350
       },
       {
-        id: 'T3', zone: 'top', name: 'Superior 3 - Frontal (AIO)',
+        id: 'T3', zone: 'top', name: 'Superior 3 - Frontal',
         orientation: 'horizontal', side: 'top',
         gy: CASE_BOUNDS.yMin, gxStart: 60, gxEnd: 77,
         inwardNormal: { x: 0, y: 1 },
@@ -748,7 +746,7 @@
     function getHardwareRects() {
       let gpuCellsWidth = 35;
       if (simState.gpuLengthMm === 200) gpuCellsWidth = 24;
-      if (simState.gpuLengthMm === 340) gpuCellsWidth = 48; // En la foto la GPU grande llega hasta superponerse con los ventiladores laterales
+      if (simState.gpuLengthMm === 340) gpuCellsWidth = 48; // GPU de gran longitud extendida hacia la bahía frontal
 
       // Posición vertical de GPU limitada para quedar siempre encima de los 3 ventiladores inferiores sobre la PSU
       const maxGpuTopY = CASE_BOUNDS.psuTopY - 9;
@@ -849,7 +847,7 @@
       const { gpuRect, cpuRect } = getHardwareRects();
       for (let j = gpuRect.y1; j <= gpuRect.y2; j++) {
         for (let i = gpuRect.x1; i <= gpuRect.x2; i++) {
-          // El extremo derecho de las GPUs modernas de triple ventilador tiene paso "flow-through" entre las aletas
+          // El extremo derecho del disipador de la GPU permite paso de aire "flow-through" entre aletas
           if (j === gpuRect.y1 && i < gpuRect.x2 - 8) {
             solid[IX(i, j)] = 1; // PCB y Backplate sólido
           } else if (i < gpuRect.x2 - 9) {
@@ -1003,7 +1001,7 @@
         }
       }
 
-      // 4. Succión propia de los ventiladores de la GPU (toman el aire frío que sube desde B1, B2 y B3)
+      // 4. Succión propia de los ventiladores de la GPU (toman el aire que asciende desde la zona inferior)
       for (let i = gpuRect.x1 + 2; i <= gpuRect.x2 - 2; i++) {
         const belowIdx = IX(i, gpuRect.y2 + 1);
         const aboveIdx = IX(i, gpuRect.y1 - 1);
@@ -1601,9 +1599,9 @@
       ctx.fillStyle = '#94a3b8';
       ctx.font = '700 11px "Inter", sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillText('FULL-MESH PSU CHAMBER', psuX + 14, psuY + psuH - 10);
+      ctx.fillText('PSU CHAMBER', psuX + 14, psuY + psuH - 10);
 
-      // 4. Radiador Superior AIO 360mm (bajo los 3 ventiladores del techo)
+      // 4. Radiador Superior (bajo los ventiladores del techo)
       if (simState.cpuCoolerType === 'aio') {
         const radX = 19 * scaleX;
         const radY = (CASE_BOUNDS.yMin + 0.6) * scaleY;
@@ -1719,14 +1717,14 @@
       ctx.fill();
       ctx.stroke();
 
-      // Barra lateral ARGB estilo ROG Strix en el extremo derecho de la GPU (como en la foto)
+      // Acento estético en el borde del disipador de la GPU
       const rgbGrad = ctx.createLinearGradient(gpuX + gpuW - 45, gpuY, gpuX + gpuW, gpuY + gpuH);
       rgbGrad.addColorStop(0, '#38bdf8');
-      rgbGrad.addColorStop(0.5, '#c084fc');
-      rgbGrad.addColorStop(1, '#f43f5e');
+      rgbGrad.addColorStop(0.5, '#818cf8');
+      rgbGrad.addColorStop(1, '#38bdf8');
       ctx.fillStyle = rgbGrad;
-      ctx.fillRect(gpuX + gpuW - 42, gpuY + 1, 40, 3);
-      ctx.fillRect(gpuX + gpuW - 42, gpuY + gpuH - 4, 40, 3);
+      ctx.fillRect(gpuX + gpuW - 42, gpuY + 1, 40, 2);
+      ctx.fillRect(gpuX + gpuW - 42, gpuY + gpuH - 3, 40, 2);
 
       // Aletas verticales del disipador GPU
       ctx.strokeStyle = 'rgba(148, 163, 184, 0.38)';
@@ -1982,23 +1980,21 @@
         deadCard.className = 'bg-rose-950/40 border border-rose-500/50 rounded-lg px-3 py-1.5 flex items-center gap-2';
         diagBadge.textContent = 'RIESGO TÉRMICO';
         diagBadge.className = 'text-[10px] font-mono-tech px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40';
-        diagText.textContent = `Se detecta un ${pct}% de volumen con aire estancado. Activa los 3 ventiladores inferiores sobre la PSU o los laterales para barrer el calor bajo la GPU.`;
+        diagText.textContent = `Se detecta un ${pct}% de volumen con aire estancado. Activa ventiladores de entrada o aumenta las RPM para mejorar la renovación de aire.`;
       } else if (pct >= 15) {
         deadPctEl.className = 'font-mono-tech text-xs sm:text-sm font-bold text-amber-400';
         deadLabelEl.textContent = 'Estancamiento Moderado';
         deadCard.className = 'bg-slate-900/90 border border-amber-500/40 rounded-lg px-3 py-1.5 flex items-center gap-2';
         diagBadge.textContent = 'ACEPTABLE';
         diagBadge.className = 'text-[10px] font-mono-tech px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
-        diagText.textContent = `Flujo funcional (${pct}% estancado). Puedes ajustar la altura de la PSU o de los ventiladores laterales para optimizar el chorro sobre la GPU de ${simState.gpuLengthMm} mm.`;
+        diagText.textContent = `Flujo funcional (${pct}% estancado). Puedes ajustar las RPM o la disposición de los ventiladores para optimizar la renovación térmica.`;
       } else {
         deadPctEl.className = 'font-mono-tech text-xs sm:text-sm font-bold text-emerald-400';
         deadLabelEl.textContent = 'Renovación Alta';
         deadCard.className = 'bg-slate-900/90 border border-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-2';
         diagBadge.textContent = 'ÓPTIMO';
         diagBadge.className = 'text-[10px] font-mono-tech px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
-        diagText.textContent = simState.frontMountMode === 'aquarium'
-          ? `Configuración Acuario óptima (${pct}% estancado): los 3 ventiladores sobre el PSU Shroud refrigeran directamente la GPU y el flujo lateral sube hacia el radiador 360mm.`
-          : `Barrido horizontal y vertical eficiente (${pct}% estancado) con balance neto de ${signStr} CFM.`;
+        diagText.textContent = `Flujo aerodinámico óptimo (${pct}% estancado) con balance neto de ${signStr} CFM y ventilación continua.`;
       }
     }
 
@@ -2090,17 +2086,9 @@
     function applyFanPreset(presetName) {
       if (presetName === 'aquarium_preset') {
         simState.frontMountMode = 'aquarium';
-        simState.cpuCoolerType = 'aio';
-        simState.gpuLengthMm = 340;
-        simState.psuTopY = 50;
-        simState.rightFansOffsetY = 2;
-        document.getElementById('sliderPsuHeight').value = 50;
-        document.getElementById('sliderRightFansY').value = 2;
-
         fans.forEach(f => {
           if (f.zone === 'bottom') { f.enabled = true; f.mode = 'intake'; f.rpm = 1400; }
-          else if (f.id === 'F1') { f.enabled = false; f.mode = 'intake'; f.rpm = 1350; }
-          else if (f.id === 'F2' || f.id === 'F3') { f.enabled = true; f.mode = 'intake'; f.rpm = 1450; }
+          else if (f.zone === 'front') { f.enabled = true; f.mode = 'intake'; f.rpm = 1400; }
           else if (f.zone === 'top') { f.enabled = true; f.mode = 'exhaust'; f.rpm = 1350; }
           else if (f.id === 'R1') { f.enabled = true; f.mode = 'exhaust'; f.rpm = 1400; }
         });
@@ -2220,7 +2208,7 @@
       document.querySelectorAll('.gpu-len-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           simState.gpuLengthMm = parseInt(btn.dataset.gpulen, 10);
-          const desc = simState.gpuLengthMm === 200 ? 'Corta' : (simState.gpuLengthMm === 280 ? 'Estándar' : 'Grande / Triple Fan');
+          const desc = simState.gpuLengthMm === 200 ? 'Corta' : (simState.gpuLengthMm === 280 ? 'Estándar' : 'Grande');
           document.getElementById('gpuLengthLabel').textContent = `${simState.gpuLengthMm} mm (${desc})`;
           document.querySelectorAll('.gpu-len-btn').forEach(b => {
             const active = b === btn;
@@ -2387,7 +2375,7 @@
           const cellSolid = solid[IX(Math.round(pos.gx), Math.round(pos.gy))];
           document.getElementById('probeZone').textContent =
             cellSolid === 1 ? 'Obstáculo Sólido (Hardware)' :
-            (cellSolid === 2 ? 'Aletas Flow-Through / Rejilla' : 'Cámara Principal Acuario');
+            (cellSolid === 2 ? 'Aletas Flow-Through / Rejilla' : 'Cámara Principal');
         } else {
           tooltip.classList.add('hidden');
         }
