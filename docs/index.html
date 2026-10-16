@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AeroTherm PC - Simulador de Flujo de Aire y Termodinámica</title>
+  <title data-i18n="meta.title">AeroTherm PC - Simulador de Flujo de Aire y Termodinámica</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -89,7 +89,7 @@
           </svg>
         </div>
         <div class="flex items-center gap-2.5">
-          <h1 class="font-semibold text-base tracking-tight text-white">AeroTherm</h1>
+          <h1 data-i18n="header.brand" class="font-semibold text-base tracking-tight text-white">AeroTherm</h1>
           <span id="fpsBadge" class="text-[11px] font-mono-tech text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded">60 FPS</span>
         </div>
       </div>
@@ -97,12 +97,12 @@
       <div class="flex flex-wrap items-center gap-2.5">
         <div class="bg-slate-900/80 border border-slate-800/90 rounded-lg px-3.5 py-1.5 flex items-center gap-3.5">
           <div>
-            <div class="text-[10px] uppercase tracking-wider text-slate-400">Entrada</div>
+            <div data-i18n="header.intake" class="text-[10px] uppercase tracking-wider text-slate-400">Entrada</div>
             <div class="font-mono-tech text-sm font-semibold text-sky-400"><span id="metricIntakeCFM">0</span> <span class="text-[10px] font-normal text-slate-500">CFM</span></div>
           </div>
           <div class="h-6 w-[1px] bg-slate-800"></div>
           <div>
-            <div class="text-[10px] uppercase tracking-wider text-slate-400">Salida</div>
+            <div data-i18n="header.exhaust" class="text-[10px] uppercase tracking-wider text-slate-400">Salida</div>
             <div class="font-mono-tech text-sm font-semibold text-rose-400"><span id="metricExhaustCFM">0</span> <span class="text-[10px] font-normal text-slate-500">CFM</span></div>
           </div>
         </div>
@@ -110,9 +110,9 @@
         <div id="pressureCard" class="bg-slate-900/80 border border-slate-800/90 rounded-lg px-3.5 py-1.5 flex items-center gap-2.5 min-w-[160px]">
           <div id="pressureDot" class="w-2 h-2 rounded-full bg-emerald-400"></div>
           <div>
-            <div class="text-[10px] uppercase tracking-wider text-slate-400">Presión</div>
+            <div data-i18n="header.pressure" class="text-[10px] uppercase tracking-wider text-slate-400">Presión</div>
             <div class="flex items-center gap-1.5">
-              <span id="metricPressureState" class="text-sm font-semibold text-emerald-400">Positiva</span>
+              <span id="metricPressureState" data-i18n="header.pressureState.positive" class="text-sm font-semibold text-emerald-400">Positiva</span>
               <span id="metricPressureDelta" class="font-mono-tech text-[11px] text-slate-400">(+42 CFM)</span>
             </div>
           </div>
@@ -120,23 +120,54 @@
 
         <div class="bg-slate-900/80 border border-slate-800/90 rounded-lg px-3.5 py-1.5 flex items-center gap-3.5">
           <div>
-            <div class="text-[10px] uppercase tracking-wider text-slate-400">CPU</div>
+            <div data-i18n="header.cpu" class="text-[10px] uppercase tracking-wider text-slate-400">CPU</div>
             <div id="metricCpuTemp" class="font-mono-tech text-sm font-semibold text-amber-300">58.2 °C</div>
           </div>
           <div class="h-6 w-[1px] bg-slate-800"></div>
           <div>
-            <div class="text-[10px] uppercase tracking-wider text-slate-400">GPU</div>
+            <div data-i18n="header.gpu" class="text-[10px] uppercase tracking-wider text-slate-400">GPU</div>
             <div id="metricGpuTemp" class="font-mono-tech text-sm font-semibold text-orange-400">66.4 °C</div>
           </div>
         </div>
 
         <div id="deadSpotCard" class="bg-slate-900/80 border border-slate-800/90 rounded-lg px-3.5 py-1.5 flex items-center gap-2 transition-colors">
           <div>
-            <div class="text-[10px] uppercase tracking-wider text-slate-400">Estancamiento</div>
+            <div data-i18n="header.stagnation" class="text-[10px] uppercase tracking-wider text-slate-400">Estancamiento</div>
             <div class="flex items-center gap-1.5">
               <span id="metricDeadSpotPct" class="font-mono-tech text-sm font-semibold text-emerald-400">8%</span>
-              <span id="metricDeadSpotLabel" class="text-[11px] text-slate-400">Bajo</span>
+              <span id="metricDeadSpotLabel" data-i18n="header.stagnationLevel.low" class="text-[11px] text-slate-400">Bajo</span>
             </div>
+          </div>
+        </div>
+
+        <div id="langDropdownContainer" class="relative">
+          <button id="langDropdownBtn" type="button" title="Idioma" data-i18n-title="lang.label" aria-haspopup="listbox" aria-expanded="false" class="bg-slate-900/80 hover:bg-slate-900 border border-slate-800/90 hover:border-slate-700 rounded-lg px-3 py-2 flex items-center gap-2 text-xs font-medium text-slate-200 transition">
+            <svg class="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M2 12h20"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            <span id="langCurrentCode" class="font-mono-tech text-xs font-semibold text-slate-200">ES</span>
+            <svg id="langDropdownChevron" class="w-3 h-3 text-slate-400 transition-transform duration-150" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+
+          <div id="langDropdownMenu" role="listbox" class="hidden absolute right-0 mt-1.5 w-36 bg-slate-950/95 border border-slate-800/90 rounded-lg p-1 shadow-xl backdrop-blur-md z-50 space-y-0.5">
+            <button type="button" role="option" data-lang-option="es" class="w-full px-2.5 py-1.5 rounded-md text-xs font-medium border transition flex items-center justify-between bg-sky-500/20 border-sky-500/40 text-sky-300">
+              <span class="flex items-center gap-2">
+                <span class="font-mono-tech text-[11px] font-semibold">ES</span>
+                <span data-i18n="lang.es">Español</span>
+              </span>
+              <span data-lang-dot="es" class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+            </button>
+            <button type="button" role="option" data-lang-option="en" class="w-full px-2.5 py-1.5 rounded-md text-xs font-medium border transition flex items-center justify-between border-transparent text-slate-300 hover:bg-slate-900 hover:text-white">
+              <span class="flex items-center gap-2">
+                <span class="font-mono-tech text-[11px] font-semibold">EN</span>
+                <span data-i18n="lang.en">English</span>
+              </span>
+              <span data-lang-dot="en" class="w-1.5 h-1.5 rounded-full bg-sky-400 hidden"></span>
+            </button>
           </div>
         </div>
 
@@ -151,41 +182,41 @@
         <div class="flex flex-wrap items-center gap-1.5">
           <button id="btnToggleParticles" class="px-3 py-1.5 rounded-md text-xs font-medium border transition flex items-center gap-1.5 bg-sky-500/20 border-sky-500/50 text-sky-300">
             <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
-            Partículas
+            <span data-i18n="toolbar.particles">Partículas</span>
           </button>
 
           <button id="btnToggleVectors" class="px-3 py-1.5 rounded-md text-xs font-medium border transition flex items-center gap-1.5 bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
             <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span>
-            Vectores
+            <span data-i18n="toolbar.vectors">Vectores</span>
           </button>
 
           <button id="btnToggleThermal" class="px-3 py-1.5 rounded-md text-xs font-medium border transition flex items-center gap-1.5 bg-orange-500/20 border-orange-500/50 text-orange-300">
             <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
-            Calor
+            <span data-i18n="toolbar.thermal">Calor</span>
           </button>
 
           <button id="btnToggleDeadZones" class="px-3 py-1.5 rounded-md text-xs font-medium border transition flex items-center gap-1.5 bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700">
             <span class="w-1.5 h-1.5 rounded-full bg-fuchsia-400"></span>
-            Estancamiento
+            <span data-i18n="toolbar.deadZones">Estancamiento</span>
           </button>
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
           <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-md px-2.5 py-1">
-            <label for="selectHeatmap" class="text-[11px] text-slate-400">Fondo:</label>
+            <label for="selectHeatmap" data-i18n="toolbar.backgroundLabel" class="text-[11px] text-slate-400">Fondo:</label>
             <select id="selectHeatmap" class="bg-transparent text-xs font-medium text-slate-200 focus:outline-none cursor-pointer">
-              <option value="temperature" class="bg-slate-900">Temperatura</option>
-              <option value="pressure" class="bg-slate-900" selected>Presión</option>
-              <option value="velocity" class="bg-slate-900">Velocidad</option>
-              <option value="none" class="bg-slate-900">Ninguno</option>
+              <option value="temperature" data-i18n="toolbar.heatmap.temperature" class="bg-slate-900">Temperatura</option>
+              <option value="pressure" data-i18n="toolbar.heatmap.pressure" class="bg-slate-900" selected>Presión</option>
+              <option value="velocity" data-i18n="toolbar.heatmap.velocity" class="bg-slate-900">Velocidad</option>
+              <option value="none" data-i18n="toolbar.heatmap.none" class="bg-slate-900">Ninguno</option>
             </select>
           </div>
 
           <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-md px-2.5 py-1">
-            <label for="selectParticleColor" class="text-[11px] text-slate-400">Color:</label>
+            <label for="selectParticleColor" data-i18n="toolbar.colorLabel" class="text-[11px] text-slate-400">Color:</label>
             <select id="selectParticleColor" class="bg-transparent text-xs font-medium text-slate-200 focus:outline-none cursor-pointer">
-              <option value="thermal" class="bg-slate-900" selected>Temperatura</option>
-              <option value="speed" class="bg-slate-900">Velocidad</option>
+              <option value="thermal" data-i18n="toolbar.particleColor.thermal" class="bg-slate-900" selected>Temperatura</option>
+              <option value="speed" data-i18n="toolbar.particleColor.speed" class="bg-slate-900">Velocidad</option>
             </select>
           </div>
         </div>
@@ -196,7 +227,7 @@
 
         <div id="probeTooltip" class="pointer-events-none hidden absolute z-20 bg-slate-950/90 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-[11px] font-mono-tech text-slate-200 shadow-xl backdrop-blur-md">
           <div class="flex items-center gap-2">
-            <span class="text-sky-400 font-semibold" id="probeZone">Cámara Principal</span>
+            <span class="text-sky-400 font-semibold" id="probeZone" data-i18n="probe.mainChamber">Cámara Principal</span>
           </div>
           <div class="grid grid-cols-3 gap-2 mt-0.5 text-[10px] text-slate-300">
             <div>V: <span id="probeVel" class="text-white font-semibold">1.2 m/s</span></div>
@@ -209,23 +240,23 @@
           <div class="bg-slate-950/90 border border-slate-800/90 backdrop-blur-md px-3.5 py-1.5 rounded-lg flex items-center gap-4 text-slate-300">
             <div class="flex items-center gap-1.5">
               <span class="inline-block w-2.5 h-2.5 rounded-sm bg-sky-400"></span>
-              <span>Entrada</span>
+              <span data-i18n="legend.intake">Entrada</span>
             </div>
             <div class="flex items-center gap-1.5">
               <span class="inline-block w-2.5 h-2.5 rounded-sm bg-rose-500"></span>
-              <span>Salida</span>
+              <span data-i18n="legend.exhaust">Salida</span>
             </div>
             <div class="flex items-center gap-2">
               <span class="inline-block w-12 h-2 rounded-sm bg-gradient-to-r from-blue-500 via-emerald-400 to-red-500"></span>
-              <span class="text-slate-400">24°C – 85°C</span>
+              <span data-i18n="legend.tempRange" class="text-slate-400">24°C – 85°C</span>
             </div>
           </div>
 
           <div class="pointer-events-auto flex items-center gap-2">
             <button id="btnPauseSim" class="bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 px-3.5 py-1.5 rounded-lg text-xs font-medium transition shadow-lg">
-              <span id="pauseText">Pausar</span>
+              <span id="pauseText" data-i18n="controls.pause">Pausar</span>
             </button>
-            <button id="btnResetFluid" class="bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 px-3.5 py-1.5 rounded-lg text-xs font-medium transition shadow-lg">
+            <button id="btnResetFluid" data-i18n="controls.reset" class="bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 px-3.5 py-1.5 rounded-lg text-xs font-medium transition shadow-lg">
               Reiniciar
             </button>
           </div>
@@ -237,25 +268,25 @@
       
       <div class="p-4 border-b border-slate-800/80 bg-slate-900/30 shrink-0">
         <div class="mb-2.5">
-          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Perfiles</span>
+          <span data-i18n="presets.title" class="text-xs font-semibold uppercase tracking-wider text-slate-400">Perfiles</span>
         </div>
         <div class="grid grid-cols-3 gap-1.5">
-          <button data-preset="aquarium_preset" class="preset-btn py-2 px-2.5 rounded-lg text-xs font-medium bg-sky-500/15 border border-sky-500/40 text-sky-300 hover:bg-sky-500/25 transition text-center">
+          <button data-preset="aquarium_preset" data-i18n="presets.aquarium" class="preset-btn py-2 px-2.5 rounded-lg text-xs font-medium bg-sky-500/15 border border-sky-500/40 text-sky-300 hover:bg-sky-500/25 transition text-center">
             Acuario
           </button>
-          <button data-preset="balanced" class="preset-btn py-2 px-2.5 rounded-lg text-xs font-medium bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition text-center">
+          <button data-preset="balanced" data-i18n="presets.balanced" class="preset-btn py-2 px-2.5 rounded-lg text-xs font-medium bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition text-center">
             Frontal clásico
           </button>
-          <button data-preset="positive" class="preset-btn py-2 px-2.5 rounded-lg text-xs font-medium bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition text-center">
+          <button data-preset="positive" data-i18n="presets.positive" class="preset-btn py-2 px-2.5 rounded-lg text-xs font-medium bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition text-center">
             Presión positiva
           </button>
-          <button data-preset="chimney" class="preset-btn py-2 px-2.5 rounded-lg text-xs font-medium bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition text-center">
+          <button data-preset="chimney" data-i18n="presets.chimney" class="preset-btn py-2 px-2.5 rounded-lg text-xs font-medium bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition text-center">
             Chimenea
           </button>
-          <button data-preset="all_on" class="preset-btn py-2 px-2.5 rounded-lg text-xs font-medium bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition text-center">
+          <button data-preset="all_on" data-i18n="presets.allOn" class="preset-btn py-2 px-2.5 rounded-lg text-xs font-medium bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition text-center">
             Máximo flujo
           </button>
-          <button data-preset="all_off" class="preset-btn py-2 px-2.5 rounded-lg text-xs font-medium bg-slate-900 border border-slate-800 text-slate-400 hover:text-rose-300 hover:border-rose-800/60 transition text-center">
+          <button data-preset="all_off" data-i18n="presets.allOff" class="preset-btn py-2 px-2.5 rounded-lg text-xs font-medium bg-slate-900 border border-slate-800 text-slate-400 hover:text-rose-300 hover:border-rose-800/60 transition text-center">
             Apagado
           </button>
         </div>
@@ -264,15 +295,15 @@
       <div class="flex-1 overflow-y-auto p-4 space-y-4">
 
         <div class="bg-slate-900/50 border border-slate-800/80 rounded-xl p-4 space-y-4">
-          <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-800/80 pb-2">Gabinete</h2>
+          <h2 data-i18n="cabinet.title" class="text-xs font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-800/80 pb-2">Gabinete</h2>
 
           <div>
-            <span class="block text-xs text-slate-300 font-medium mb-1.5">Tipo de frente</span>
+            <span data-i18n="cabinet.frontType" class="block text-xs text-slate-300 font-medium mb-1.5">Tipo de frente</span>
             <div class="grid grid-cols-2 gap-2">
-              <button data-mountmode="aquarium" class="mount-mode-btn py-2 px-3 rounded-lg text-xs font-medium border bg-sky-500/20 border-sky-500/50 text-sky-300 transition text-center">
+              <button data-mountmode="aquarium" data-i18n="cabinet.glassAquarium" class="mount-mode-btn py-2 px-3 rounded-lg text-xs font-medium border bg-sky-500/20 border-sky-500/50 text-sky-300 transition text-center">
                 Cristal (Acuario)
               </button>
-              <button data-mountmode="front" class="mount-mode-btn py-2 px-3 rounded-lg text-xs font-medium border bg-slate-950 border-slate-800 text-slate-400 hover:text-white transition text-center">
+              <button data-mountmode="front" data-i18n="cabinet.frontMesh" class="mount-mode-btn py-2 px-3 rounded-lg text-xs font-medium border bg-slate-950 border-slate-800 text-slate-400 hover:text-white transition text-center">
                 Malla frontal
               </button>
             </div>
@@ -280,7 +311,7 @@
 
           <div>
             <div class="flex justify-between text-xs mb-1.5">
-              <label for="sliderCaseWidth" class="text-slate-300 font-medium">Ancho del gabinete</label>
+              <label for="sliderCaseWidth" data-i18n="cabinet.caseWidth" class="text-slate-300 font-medium">Ancho del gabinete</label>
               <span id="caseWidthLabel" class="font-mono-tech text-sky-400">504 mm</span>
             </div>
             <input id="sliderCaseWidth" type="range" min="52" max="88" value="72" class="w-full" />
@@ -291,15 +322,15 @@
             <div class="flex items-center justify-between">
               <label for="checkRearPsu" class="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-200 select-none">
                 <input id="checkRearPsu" type="checkbox" class="w-4 h-4 rounded border-slate-700 bg-slate-900 text-sky-500 focus:ring-0 focus:ring-offset-0 cursor-pointer" />
-                <span>PSU trasera</span>
+                <span data-i18n="cabinet.rearPsu">PSU trasera</span>
               </label>
-              <span id="badgePsuType" class="text-[10px] font-mono-tech px-2 py-0.5 rounded bg-slate-900 text-slate-400">PSU inferior</span>
+              <span id="badgePsuType" data-i18n="cabinet.bottomPsu" class="text-[10px] font-mono-tech px-2 py-0.5 rounded bg-slate-900 text-slate-400">PSU inferior</span>
             </div>
 
             <div>
               <div class="flex justify-between text-xs mb-1.5">
-                <label id="lblPsuHeight" for="sliderPsuHeight" class="text-slate-300 font-medium">Altura de cámara PSU</label>
-                <span id="psuHeightLabel" class="font-mono-tech text-emerald-400">Estándar</span>
+                <label id="lblPsuHeight" for="sliderPsuHeight" data-i18n="cabinet.psuChamberHeight" class="text-slate-300 font-medium">Altura de cámara PSU</label>
+                <span id="psuHeightLabel" data-i18n="cabinet.heightStandard" class="font-mono-tech text-emerald-400">Estándar</span>
               </div>
               <input id="sliderPsuHeight" type="range" min="45" max="55" value="50" class="w-full" />
             </div>
@@ -307,7 +338,7 @@
 
           <div>
             <div class="flex justify-between text-xs mb-1.5">
-              <label for="sliderRightFansY" class="text-slate-300 font-medium">Altura de ventiladores frontales</label>
+              <label for="sliderRightFansY" data-i18n="cabinet.frontFansHeight" class="text-slate-300 font-medium">Altura de ventiladores frontales</label>
               <span id="rightFansYLabel" class="font-mono-tech text-sky-400">+2</span>
             </div>
             <input id="sliderRightFansY" type="range" min="-4" max="14" value="2" class="w-full" />
@@ -316,19 +347,19 @@
 
           <div>
             <div class="flex justify-between text-xs mb-1.5">
-              <label for="sliderRearFanY" class="text-slate-300 font-medium">Altura de ventilador trasero</label>
-              <span id="rearFanYLabel" class="font-mono-tech text-slate-300">Media</span>
+              <label for="sliderRearFanY" data-i18n="cabinet.rearFanHeight" class="text-slate-300 font-medium">Altura de ventilador trasero</label>
+              <span id="rearFanYLabel" data-i18n="cabinet.heightMedium" class="font-mono-tech text-slate-300">Media</span>
             </div>
             <input id="sliderRearFanY" type="range" min="11" max="28" value="16" class="w-full" />
           </div>
         </div>
 
         <div class="bg-slate-900/50 border border-slate-800/80 rounded-xl p-4 space-y-4">
-          <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-800/80 pb-2">Componentes</h2>
+          <h2 data-i18n="components.title" class="text-xs font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-800/80 pb-2">Componentes</h2>
 
           <div>
             <div class="flex justify-between text-xs mb-1.5">
-              <span class="text-slate-300 font-medium">Tamaño de GPU</span>
+              <span data-i18n="components.gpuSize" class="text-slate-300 font-medium">Tamaño de GPU</span>
               <span id="gpuLengthLabel" class="font-mono-tech text-sky-400">340 mm</span>
             </div>
             <div class="grid grid-cols-3 gap-2">
@@ -346,22 +377,22 @@
 
           <div>
             <div class="flex justify-between text-xs mb-1.5">
-              <label for="sliderGpuY" class="text-slate-300 font-medium">Posición vertical de GPU</label>
-              <span id="gpuSlotLabel" class="font-mono-tech text-slate-300">Media</span>
+              <label for="sliderGpuY" data-i18n="components.gpuVerticalPos" class="text-slate-300 font-medium">Posición vertical de GPU</label>
+              <span id="gpuSlotLabel" data-i18n="components.slotMiddle" class="font-mono-tech text-slate-300">Media</span>
             </div>
             <input id="sliderGpuY" type="range" min="0" max="100" value="48" class="w-full" />
           </div>
 
           <div>
-            <span class="block text-xs text-slate-300 font-medium mb-1.5">Disipador de CPU</span>
+            <span data-i18n="components.cpuCooler" class="block text-xs text-slate-300 font-medium mb-1.5">Disipador de CPU</span>
             <div class="grid grid-cols-3 gap-2">
-              <button data-cpucooler="tower" class="cpu-cooler-btn py-2 px-2.5 rounded-lg text-xs font-medium border bg-slate-950 border-slate-800 text-slate-400 hover:text-white transition text-center">
+              <button data-cpucooler="tower" data-i18n="components.coolerTower" class="cpu-cooler-btn py-2 px-2.5 rounded-lg text-xs font-medium border bg-slate-950 border-slate-800 text-slate-400 hover:text-white transition text-center">
                 Torre
               </button>
-              <button data-cpucooler="lowprofile" class="cpu-cooler-btn py-2 px-2.5 rounded-lg text-xs font-medium border bg-slate-950 border-slate-800 text-slate-400 hover:text-white transition text-center">
+              <button data-cpucooler="lowprofile" data-i18n="components.coolerLowProfile" class="cpu-cooler-btn py-2 px-2.5 rounded-lg text-xs font-medium border bg-slate-950 border-slate-800 text-slate-400 hover:text-white transition text-center">
                 Perfil bajo
               </button>
-              <button data-cpucooler="aio" class="cpu-cooler-btn py-2 px-2.5 rounded-lg text-xs font-medium border bg-sky-500/20 border-sky-500/50 text-sky-300 transition text-center">
+              <button data-cpucooler="aio" data-i18n="components.coolerAio" class="cpu-cooler-btn py-2 px-2.5 rounded-lg text-xs font-medium border bg-sky-500/20 border-sky-500/50 text-sky-300 transition text-center">
                 Líquida AIO
               </button>
             </div>
@@ -369,7 +400,7 @@
 
           <div>
             <div class="flex justify-between text-xs mb-1.5">
-              <label for="sliderThermalLoad" class="text-slate-300 font-medium">Carga térmica</label>
+              <label for="sliderThermalLoad" data-i18n="components.thermalLoad" class="text-slate-300 font-medium">Carga térmica</label>
               <span id="thermalLoadLabel" class="font-mono-tech text-orange-400">80%</span>
             </div>
             <input id="sliderThermalLoad" type="range" min="15" max="100" value="80" class="w-full" />
@@ -378,21 +409,21 @@
 
         <div class="bg-slate-900/50 border border-slate-800/80 rounded-xl p-4 space-y-3">
           <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
-            <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Ventiladores</h2>
-            <span id="badgeBottomFans" class="text-[11px] text-slate-400 font-mono-tech">Sobre PSU</span>
+            <h2 data-i18n="fans.title" class="text-xs font-semibold uppercase tracking-wider text-slate-400">Ventiladores</h2>
+            <span id="badgeBottomFans" data-i18n="fans.badgeAbovePsu" class="text-[11px] text-slate-400 font-mono-tech">Sobre PSU</span>
           </div>
 
           <div class="grid grid-cols-4 gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800/80">
-            <button data-zone="bottom" id="tabBottomFans" class="zone-tab-btn py-1.5 rounded text-xs font-medium bg-sky-500/20 text-sky-300 border border-sky-500/40 transition">
+            <button data-zone="bottom" id="tabBottomFans" data-i18n="fans.zones.bottom" class="zone-tab-btn py-1.5 rounded text-xs font-medium bg-sky-500/20 text-sky-300 border border-sky-500/40 transition">
               Inferior
             </button>
-            <button data-zone="front" class="zone-tab-btn py-1.5 rounded text-xs font-medium text-slate-400 hover:text-slate-200 border border-transparent transition">
+            <button data-zone="front" data-i18n="fans.zones.front" class="zone-tab-btn py-1.5 rounded text-xs font-medium text-slate-400 hover:text-slate-200 border border-transparent transition">
               Frontal
             </button>
-            <button data-zone="top" class="zone-tab-btn py-1.5 rounded text-xs font-medium text-slate-400 hover:text-slate-200 border border-transparent transition">
+            <button data-zone="top" data-i18n="fans.zones.top" class="zone-tab-btn py-1.5 rounded text-xs font-medium text-slate-400 hover:text-slate-200 border border-transparent transition">
               Superior
             </button>
-            <button data-zone="rear" class="zone-tab-btn py-1.5 rounded text-xs font-medium text-slate-400 hover:text-slate-200 border border-transparent transition">
+            <button data-zone="rear" data-i18n="fans.zones.rear" class="zone-tab-btn py-1.5 rounded text-xs font-medium text-slate-400 hover:text-slate-200 border border-transparent transition">
               Trasero
             </button>
           </div>
@@ -403,10 +434,10 @@
 
         <div class="bg-slate-900/50 border border-slate-800/80 rounded-xl p-4 space-y-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Diagnóstico</span>
-            <span id="diagBadge" class="text-[10px] font-mono-tech px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">ÓPTIMO</span>
+            <span data-i18n="diagnostics.title" class="text-xs font-semibold uppercase tracking-wider text-slate-400">Diagnóstico</span>
+            <span id="diagBadge" data-i18n="diagnostics.badge.optimal" class="text-[10px] font-mono-tech px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">ÓPTIMO</span>
           </div>
-          <p id="diagSummaryText" class="text-xs text-slate-300 leading-relaxed">
+          <p id="diagSummaryText" data-i18n="diagnostics.summary.initial" class="text-xs text-slate-300 leading-relaxed">
             Flujo equilibrado y renovación constante de aire.
           </p>
         </div>
@@ -416,6 +447,514 @@
   </main>
 
   <script>
+    /***************************************************************************
+     * 0. INTERNACIONALIZACIÓN (i18n) - DICCIONARIO Y MOTOR BASE
+     ***************************************************************************/
+    const I18N_STORAGE_KEY = 'aerotherm_lang';
+
+    const I18N_DICTIONARY = {
+      es: {
+        meta: {
+          title: 'AeroTherm PC - Simulador de Flujo de Aire y Termodinámica'
+        },
+        lang: {
+          label: 'Idioma',
+          es: 'Español',
+          en: 'English',
+          esShort: 'ES',
+          enShort: 'EN'
+        },
+        header: {
+          brand: 'AeroTherm',
+          intake: 'Entrada',
+          exhaust: 'Salida',
+          pressure: 'Presión',
+          pressureState: {
+            noFlow: 'Sin flujo',
+            positive: 'Positiva',
+            negative: 'Negativa',
+            balanced: 'Equilibrada'
+          },
+          cpu: 'CPU',
+          gpu: 'GPU',
+          stagnation: 'Estancamiento',
+          stagnationLevel: {
+            low: 'Bajo',
+            heatPockets: 'Bolsas de calor',
+            moderate: 'Moderado',
+            highTurnover: 'Renovación alta'
+          }
+        },
+        toolbar: {
+          particles: 'Partículas',
+          vectors: 'Vectores',
+          thermal: 'Calor',
+          deadZones: 'Estancamiento',
+          backgroundLabel: 'Fondo:',
+          heatmap: {
+            temperature: 'Temperatura',
+            pressure: 'Presión',
+            velocity: 'Velocidad',
+            none: 'Ninguno'
+          },
+          colorLabel: 'Color:',
+          particleColor: {
+            thermal: 'Temperatura',
+            speed: 'Velocidad'
+          }
+        },
+        probe: {
+          mainChamber: 'Cámara Principal',
+          component: 'Componente',
+          heatsink: 'Disipador',
+          interior: 'Interior'
+        },
+        legend: {
+          intake: 'Entrada',
+          exhaust: 'Salida',
+          tempRange: '24°C – 85°C'
+        },
+        controls: {
+          pause: 'Pausar',
+          resume: 'Reanudar',
+          reset: 'Reiniciar'
+        },
+        canvas: {
+          psu: 'PSU',
+          rearPsu: 'PSU TRASERA',
+          gpuNoSpace: ' (sin espacio)',
+          rear: 'TRASERO',
+          frontGlass: 'CRISTAL FRONTAL',
+          frontMesh: 'MALLA FRONTAL',
+          fanIn: 'IN',
+          fanOut: 'OUT',
+          fanOff: 'OFF'
+        },
+        presets: {
+          title: 'Perfiles',
+          aquarium: 'Acuario',
+          balanced: 'Frontal clásico',
+          positive: 'Presión positiva',
+          chimney: 'Chimenea',
+          allOn: 'Máximo flujo',
+          allOff: 'Apagado'
+        },
+        cabinet: {
+          title: 'Gabinete',
+          frontType: 'Tipo de frente',
+          glassAquarium: 'Cristal (Acuario)',
+          frontMesh: 'Malla frontal',
+          caseWidth: 'Ancho del gabinete',
+          warnNoSpaceFans: 'Sin espacio para {fans}',
+          warnGpuExceedsWidth: 'La GPU de {length} mm excede el ancho',
+          rearPsu: 'PSU trasera',
+          bottomPsu: 'PSU inferior',
+          psuChamberHeight: 'Altura de cámara PSU',
+          caseHeight: 'Altura del gabinete',
+          heightHigh: 'Alta',
+          heightStandard: 'Estándar',
+          heightMedium: 'Media',
+          heightLow: 'Baja',
+          frontFansHeight: 'Altura de ventiladores frontales',
+          twoFansSuffix: '{offset} (2 ventiladores)',
+          warnNoVerticalSpaceF3: 'Sin espacio vertical para F3.',
+          rearFanHeight: 'Altura de ventilador trasero'
+        },
+        components: {
+          title: 'Componentes',
+          gpuSize: 'Tamaño de GPU',
+          gpuVerticalPos: 'Posición vertical de GPU',
+          slotUpper: 'Superior',
+          slotMiddle: 'Media',
+          slotLower: 'Inferior',
+          cpuCooler: 'Disipador de CPU',
+          coolerTower: 'Torre',
+          coolerLowProfile: 'Perfil bajo',
+          coolerAio: 'Líquida AIO',
+          thermalLoad: 'Carga térmica'
+        },
+        fans: {
+          title: 'Ventiladores',
+          badgeAbovePsu: 'Sobre PSU',
+          badgeOnFloor: 'En piso',
+          zones: {
+            bottom: 'Inferior',
+            front: 'Frontal',
+            top: 'Superior',
+            rear: 'Trasero'
+          },
+          names: {
+            B1: 'Inferior izquierdo',
+            B2: 'Inferior central',
+            B3: 'Inferior derecho',
+            F1: 'Frontal superior',
+            F2: 'Frontal central',
+            F3: 'Frontal inferior',
+            T1: 'Superior trasero',
+            T2: 'Superior central',
+            T3: 'Superior frontal',
+            R1: 'Trasero'
+          },
+          status: {
+            active: 'Activo',
+            inactive: 'Inactivo',
+            noVerticalSpace: 'Sin espacio vertical',
+            noSpace: 'Sin espacio'
+          },
+          mode: {
+            intake: 'Entrada',
+            exhaust: 'Salida'
+          },
+          speed: 'Velocidad'
+        },
+        diagnostics: {
+          title: 'Diagnóstico',
+          badge: {
+            optimal: 'ÓPTIMO',
+            acceptable: 'ACEPTABLE',
+            thermalRisk: 'RIESGO TÉRMICO'
+          },
+          summary: {
+            initial: 'Flujo equilibrado y renovación constante de aire.',
+            optimal: 'Flujo aerodinámico óptimo ({pct}% estancado) con balance neto de {delta} CFM y ventilación continua.',
+            acceptable: 'Flujo funcional ({pct}% estancado). Puedes ajustar las RPM o la disposición de los ventiladores para optimizar la renovación térmica.',
+            thermalRisk: 'Se detecta un {pct}% de volumen con aire estancado. Activa ventiladores de entrada o aumenta las RPM para mejorar la renovación de aire.'
+          }
+        }
+      },
+
+      en: {
+        meta: {
+          title: 'AeroTherm PC - Airflow & Thermodynamics Simulator'
+        },
+        lang: {
+          label: 'Language',
+          es: 'Español',
+          en: 'English',
+          esShort: 'ES',
+          enShort: 'EN'
+        },
+        header: {
+          brand: 'AeroTherm',
+          intake: 'Intake',
+          exhaust: 'Exhaust',
+          pressure: 'Pressure',
+          pressureState: {
+            noFlow: 'No flow',
+            positive: 'Positive',
+            negative: 'Negative',
+            balanced: 'Balanced'
+          },
+          cpu: 'CPU',
+          gpu: 'GPU',
+          stagnation: 'Stagnation',
+          stagnationLevel: {
+            low: 'Low',
+            heatPockets: 'Heat pockets',
+            moderate: 'Moderate',
+            highTurnover: 'High turnover'
+          }
+        },
+        toolbar: {
+          particles: 'Particles',
+          vectors: 'Vectors',
+          thermal: 'Thermal',
+          deadZones: 'Stagnation',
+          backgroundLabel: 'Background:',
+          heatmap: {
+            temperature: 'Temperature',
+            pressure: 'Pressure',
+            velocity: 'Velocity',
+            none: 'None'
+          },
+          colorLabel: 'Color:',
+          particleColor: {
+            thermal: 'Temperature',
+            speed: 'Velocity'
+          }
+        },
+        probe: {
+          mainChamber: 'Main Chamber',
+          component: 'Component',
+          heatsink: 'Heatsink',
+          interior: 'Interior'
+        },
+        legend: {
+          intake: 'Intake',
+          exhaust: 'Exhaust',
+          tempRange: '24°C – 85°C'
+        },
+        controls: {
+          pause: 'Pause',
+          resume: 'Resume',
+          reset: 'Reset'
+        },
+        canvas: {
+          psu: 'PSU',
+          rearPsu: 'REAR PSU',
+          gpuNoSpace: ' (no space)',
+          rear: 'REAR',
+          frontGlass: 'FRONT GLASS',
+          frontMesh: 'FRONT MESH',
+          fanIn: 'IN',
+          fanOut: 'OUT',
+          fanOff: 'OFF'
+        },
+        presets: {
+          title: 'Presets',
+          aquarium: 'Aquarium',
+          balanced: 'Classic Front',
+          positive: 'Positive Pressure',
+          chimney: 'Chimney',
+          allOn: 'Max Airflow',
+          allOff: 'All Off'
+        },
+        cabinet: {
+          title: 'Chassis',
+          frontType: 'Front panel type',
+          glassAquarium: 'Glass (Aquarium)',
+          frontMesh: 'Front Mesh',
+          caseWidth: 'Case width',
+          warnNoSpaceFans: 'No space for {fans}',
+          warnGpuExceedsWidth: 'The {length} mm GPU exceeds case width',
+          rearPsu: 'Rear PSU',
+          bottomPsu: 'Bottom PSU',
+          psuChamberHeight: 'PSU shroud height',
+          caseHeight: 'Case height',
+          heightHigh: 'High',
+          heightStandard: 'Standard',
+          heightMedium: 'Medium',
+          heightLow: 'Low',
+          frontFansHeight: 'Front fans height',
+          twoFansSuffix: '{offset} (2 fans)',
+          warnNoVerticalSpaceF3: 'No vertical space for F3.',
+          rearFanHeight: 'Rear fan height'
+        },
+        components: {
+          title: 'Components',
+          gpuSize: 'GPU size',
+          gpuVerticalPos: 'GPU vertical position',
+          slotUpper: 'Upper',
+          slotMiddle: 'Middle',
+          slotLower: 'Lower',
+          cpuCooler: 'CPU Cooler',
+          coolerTower: 'Tower',
+          coolerLowProfile: 'Low Profile',
+          coolerAio: 'AIO Liquid',
+          thermalLoad: 'Thermal load'
+        },
+        fans: {
+          title: 'Fans',
+          badgeAbovePsu: 'Above PSU',
+          badgeOnFloor: 'Bottom floor',
+          zones: {
+            bottom: 'Bottom',
+            front: 'Front',
+            top: 'Top',
+            rear: 'Rear'
+          },
+          names: {
+            B1: 'Bottom Left',
+            B2: 'Bottom Center',
+            B3: 'Bottom Right',
+            F1: 'Front Top',
+            F2: 'Front Center',
+            F3: 'Front Bottom',
+            T1: 'Top Rear',
+            T2: 'Top Center',
+            T3: 'Top Front',
+            R1: 'Rear'
+          },
+          status: {
+            active: 'Active',
+            inactive: 'Inactive',
+            noVerticalSpace: 'No vertical space',
+            noSpace: 'No space'
+          },
+          mode: {
+            intake: 'Intake',
+            exhaust: 'Exhaust'
+          },
+          speed: 'Speed'
+        },
+        diagnostics: {
+          title: 'Diagnostics',
+          badge: {
+            optimal: 'OPTIMAL',
+            acceptable: 'ACCEPTABLE',
+            thermalRisk: 'THERMAL RISK'
+          },
+          summary: {
+            initial: 'Balanced airflow and constant air turnover.',
+            optimal: 'Optimal aerodynamic flow ({pct}% stagnant) with a net balance of {delta} CFM and continuous ventilation.',
+            acceptable: 'Functional airflow ({pct}% stagnant). You can adjust fan RPM or layout to optimize thermal turnover.',
+            thermalRisk: '{pct}% of chamber volume has stagnant air. Enable intake fans or increase RPM to improve air turnover.'
+          }
+        }
+      }
+    };
+
+    function detectInitialLanguage() {
+      try {
+        const stored = localStorage.getItem(I18N_STORAGE_KEY);
+        if (stored && I18N_DICTIONARY[stored]) {
+          return stored;
+        }
+      } catch (e) {
+        // Ignorar errores de acceso a localStorage
+      }
+      const navLang = (navigator.language || navigator.userLanguage || 'es').toLowerCase();
+      if (navLang.startsWith('en')) return 'en';
+      if (navLang.startsWith('es')) return 'es';
+      return 'es';
+    }
+
+    let currentLang = detectInitialLanguage();
+
+    function t(key, params = {}) {
+      if (!key) return '';
+      const activeDict = I18N_DICTIONARY[currentLang] || I18N_DICTIONARY.es;
+      let val = key.split('.').reduce((obj, k) => (obj && obj[k] !== undefined ? obj[k] : undefined), activeDict);
+      if (val === undefined && currentLang !== 'es') {
+        val = key.split('.').reduce((obj, k) => (obj && obj[k] !== undefined ? obj[k] : undefined), I18N_DICTIONARY.es);
+      }
+      if (typeof val !== 'string') return key;
+      return val.replace(/\{(\w+)\}/g, (_, token) => (params[token] !== undefined ? params[token] : `{${token}}`));
+    }
+
+    function updateLangDropdownUI() {
+      const codeEl = document.getElementById('langCurrentCode');
+      if (codeEl) {
+        codeEl.textContent = currentLang.toUpperCase();
+      }
+      document.querySelectorAll('[data-lang-option]').forEach(btn => {
+        const isSelected = btn.getAttribute('data-lang-option') === currentLang;
+        btn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+        btn.className = `w-full px-2.5 py-1.5 rounded-md text-xs font-medium border transition flex items-center justify-between ${
+          isSelected
+            ? 'bg-sky-500/20 border-sky-500/40 text-sky-300'
+            : 'border-transparent text-slate-300 hover:bg-slate-900 hover:text-white'
+        }`;
+        const dot = btn.querySelector('[data-lang-dot]');
+        if (dot) {
+          dot.classList.toggle('hidden', !isSelected);
+        }
+      });
+    }
+
+    function refreshDynamicUI() {
+      if (typeof fans === 'undefined') return;
+      fans.forEach(fan => {
+        fan.name = t(`fans.names.${fan.id}`);
+      });
+      if (typeof updatePsuHeightUI === 'function') updatePsuHeightUI();
+      if (typeof updateCaseWidthUI === 'function') updateCaseWidthUI();
+      if (typeof updateRightFansYUI === 'function') updateRightFansYUI();
+      if (typeof updateRearFanYUI === 'function') updateRearFanYUI();
+      if (typeof updateGpuSlotUI === 'function') updateGpuSlotUI();
+      const pauseEl = document.getElementById('pauseText');
+      if (pauseEl && typeof simState !== 'undefined') {
+        const pauseKey = simState.paused ? 'controls.resume' : 'controls.pause';
+        pauseEl.setAttribute('data-i18n', pauseKey);
+        pauseEl.textContent = t(pauseKey);
+      }
+      if (typeof renderFanControlsList === 'function') renderFanControlsList();
+      if (typeof updateTelemetryHUD === 'function') updateTelemetryHUD();
+    }
+
+    function setLanguage(lang) {
+      const normalized = (lang && I18N_DICTIONARY[lang]) ? lang : 'es';
+      currentLang = normalized;
+
+      try {
+        localStorage.setItem(I18N_STORAGE_KEY, currentLang);
+      } catch (e) {
+        // Ignorar errores de almacenamiento
+      }
+
+      document.documentElement.setAttribute('lang', currentLang);
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (key) {
+          el.textContent = t(key);
+        }
+      });
+
+      document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        const key = el.getAttribute('data-i18n-title');
+        if (key) {
+          el.setAttribute('title', t(key));
+        }
+      });
+
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (key) {
+          el.setAttribute('placeholder', t(key));
+        }
+      });
+
+      updateLangDropdownUI();
+      refreshDynamicUI();
+    }
+
+    function initI18n() {
+      const container = document.getElementById('langDropdownContainer');
+      const btn = document.getElementById('langDropdownBtn');
+      const menu = document.getElementById('langDropdownMenu');
+      const chevron = document.getElementById('langDropdownChevron');
+
+      function closeDropdown() {
+        if (!menu || !btn) return;
+        menu.classList.add('hidden');
+        btn.setAttribute('aria-expanded', 'false');
+        if (chevron) chevron.classList.remove('rotate-180');
+      }
+
+      function toggleDropdown() {
+        if (!menu || !btn) return;
+        const isHidden = menu.classList.contains('hidden');
+        if (isHidden) {
+          menu.classList.remove('hidden');
+          btn.setAttribute('aria-expanded', 'true');
+          if (chevron) chevron.classList.add('rotate-180');
+        } else {
+          closeDropdown();
+        }
+      }
+
+      if (btn) {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleDropdown();
+        });
+      }
+
+      document.querySelectorAll('[data-lang-option]').forEach(optionBtn => {
+        optionBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const selectedLang = optionBtn.getAttribute('data-lang-option');
+          setLanguage(selectedLang);
+          closeDropdown();
+        });
+      });
+
+      document.addEventListener('click', (e) => {
+        if (container && !container.contains(e.target)) {
+          closeDropdown();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeDropdown();
+        }
+      });
+
+      setLanguage(currentLang);
+    }
+
     /***************************************************************************
      * 1. DEFINICIÓN DE PARÁMETROS DEL SOLVER DE FLUIDOS (NAVIER-STOKES 2D)
      ***************************************************************************/
@@ -465,28 +1004,28 @@
 
     const fans = [
       {
-        id: 'B1', zone: 'bottom', name: 'Inferior izquierdo',
+        id: 'B1', zone: 'bottom', name: t('fans.names.B1'),
         orientation: 'horizontal', side: 'bottom',
         gy: 49, gxStart: 16, gxEnd: 33,
         inwardNormal: { x: 0, y: -1 },
         enabled: true, mode: 'intake', rpm: 1400
       },
       {
-        id: 'B2', zone: 'bottom', name: 'Inferior central',
+        id: 'B2', zone: 'bottom', name: t('fans.names.B2'),
         orientation: 'horizontal', side: 'bottom',
         gy: 49, gxStart: 36, gxEnd: 53,
         inwardNormal: { x: 0, y: -1 },
         enabled: true, mode: 'intake', rpm: 1400
       },
       {
-        id: 'B3', zone: 'bottom', name: 'Inferior derecho',
+        id: 'B3', zone: 'bottom', name: t('fans.names.B3'),
         orientation: 'horizontal', side: 'bottom',
         gy: 49, gxStart: 56, gxEnd: 73,
         inwardNormal: { x: 0, y: -1 },
         enabled: true, mode: 'intake', rpm: 1400
       },
       {
-        id: 'F1', zone: 'front', name: 'Frontal superior',
+        id: 'F1', zone: 'front', name: t('fans.names.F1'),
         orientation: 'vertical', side: 'front',
         gx: CASE_BOUNDS.xMax, baseGyStart: 13, baseGyEnd: 23,
         gyStart: 15, gyEnd: 25,
@@ -494,7 +1033,7 @@
         enabled: false, mode: 'intake', rpm: 1350
       },
       {
-        id: 'F2', zone: 'front', name: 'Frontal central',
+        id: 'F2', zone: 'front', name: t('fans.names.F2'),
         orientation: 'vertical', side: 'front',
         gx: CASE_BOUNDS.xMax, baseGyStart: 25, baseGyEnd: 35,
         gyStart: 27, gyEnd: 37,
@@ -502,7 +1041,7 @@
         enabled: true, mode: 'intake', rpm: 1450
       },
       {
-        id: 'F3', zone: 'front', name: 'Frontal inferior',
+        id: 'F3', zone: 'front', name: t('fans.names.F3'),
         orientation: 'vertical', side: 'front',
         gx: CASE_BOUNDS.xMax, baseGyStart: 37, baseGyEnd: 47,
         gyStart: 39, gyEnd: 49,
@@ -510,28 +1049,28 @@
         enabled: true, mode: 'intake', rpm: 1450
       },
       {
-        id: 'T1', zone: 'top', name: 'Superior trasero',
+        id: 'T1', zone: 'top', name: t('fans.names.T1'),
         orientation: 'horizontal', side: 'top',
         gy: CASE_BOUNDS.yMin, gxStart: 20, gxEnd: 37,
         inwardNormal: { x: 0, y: 1 },
         enabled: true, mode: 'exhaust', rpm: 1350
       },
       {
-        id: 'T2', zone: 'top', name: 'Superior central',
+        id: 'T2', zone: 'top', name: t('fans.names.T2'),
         orientation: 'horizontal', side: 'top',
         gy: CASE_BOUNDS.yMin, gxStart: 40, gxEnd: 57,
         inwardNormal: { x: 0, y: 1 },
         enabled: true, mode: 'exhaust', rpm: 1350
       },
       {
-        id: 'T3', zone: 'top', name: 'Superior frontal',
+        id: 'T3', zone: 'top', name: t('fans.names.T3'),
         orientation: 'horizontal', side: 'top',
         gy: CASE_BOUNDS.yMin, gxStart: 60, gxEnd: 77,
         inwardNormal: { x: 0, y: 1 },
         enabled: true, mode: 'exhaust', rpm: 1350
       },
       {
-        id: 'R1', zone: 'rear', name: 'Trasero',
+        id: 'R1', zone: 'rear', name: t('fans.names.R1'),
         orientation: 'vertical', side: 'rear',
         gx: CASE_BOUNDS.xMin, gyStart: 16, gyEnd: 28,
         inwardNormal: { x: 1, y: 0 },
@@ -1561,14 +2100,14 @@
         ctx.fillStyle = '#94a3b8';
         ctx.font = '700 11px "Inter", sans-serif';
         ctx.textAlign = 'left';
-        ctx.fillText('PSU', psuX + 14, psuY + psuH - 10);
+        ctx.fillText(t('canvas.psu'), psuX + 14, psuY + psuH - 10);
       } else {
         // En PSU trasera: no hay sótano inferior; la fuente va detrás de la placa base
         const floorY = CASE_BOUNDS.psuTopY * scaleY;
         ctx.fillStyle = 'rgba(56, 189, 248, 0.45)';
         ctx.font = '700 9px "JetBrains Mono", monospace';
         ctx.textAlign = 'left';
-        ctx.fillText('PSU TRASERA', caseX + 14, floorY - 8);
+        ctx.fillText(t('canvas.rearPsu'), caseX + 14, floorY - 8);
 
         // Panel I/O superior compacto en el techo del chasis
         const topIoX = caseX + caseW - 68;
@@ -1729,7 +2268,7 @@
       ctx.font = '700 11px "JetBrains Mono", monospace';
       ctx.textAlign = 'left';
       ctx.fillText(
-        `GPU ${simState.gpuLengthMm} mm${gpuRect.clipped ? ' (sin espacio)' : ''}  ·  ${simState.gpuTempEst.toFixed(1)}°C`,
+        `GPU ${simState.gpuLengthMm} mm${gpuRect.clipped ? t('canvas.gpuNoSpace') : ''}  ·  ${simState.gpuTempEst.toFixed(1)}°C`,
         gpuX + 10,
         gpuY + gpuH / 2 + 4
       );
@@ -1762,10 +2301,10 @@
       ctx.fillStyle = 'rgba(148, 163, 184, 0.7)';
       ctx.font = '600 10px "JetBrains Mono", monospace';
       ctx.textAlign = 'left';
-      ctx.fillText('TRASERO', caseX + 8, caseY - 8);
+      ctx.fillText(t('canvas.rear'), caseX + 8, caseY - 8);
       ctx.textAlign = 'right';
       ctx.fillText(
-        simState.frontMountMode === 'aquarium' ? 'CRISTAL FRONTAL' : 'MALLA FRONTAL',
+        simState.frontMountMode === 'aquarium' ? t('canvas.frontGlass') : t('canvas.frontMesh'),
         caseX + caseW - 8,
         caseY - 8
       );
@@ -1839,7 +2378,7 @@
         ctx.fillStyle = fan.enabled ? '#ffffff' : '#64748b';
         ctx.font = '700 9px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
-        ctx.fillText(`${fan.id} ${fan.enabled ? (isIntake ? 'IN' : 'OUT') : 'OFF'}`, cx, cy + 3);
+        ctx.fillText(`${fan.id} ${fan.enabled ? (isIntake ? t('canvas.fanIn') : t('canvas.fanOut')) : t('canvas.fanOff')}`, cx, cy + 3);
         ctx.restore();
         return;
       }
@@ -1927,19 +2466,19 @@
       const diagText = document.getElementById('diagSummaryText');
 
       if (simState.intakeCFM === 0 && simState.exhaustCFM === 0) {
-        stateEl.textContent = 'Sin flujo';
+        stateEl.textContent = t('header.pressureState.noFlow');
         stateEl.className = 'text-xs sm:text-sm font-bold text-slate-400';
         dotEl.className = 'w-2 h-2 rounded-full bg-slate-500';
       } else if (delta > 12) {
-        stateEl.textContent = 'Positiva';
+        stateEl.textContent = t('header.pressureState.positive');
         stateEl.className = 'text-xs sm:text-sm font-bold text-emerald-400';
         dotEl.className = 'w-2 h-2 rounded-full bg-emerald-400';
       } else if (delta < -12) {
-        stateEl.textContent = 'Negativa';
+        stateEl.textContent = t('header.pressureState.negative');
         stateEl.className = 'text-xs sm:text-sm font-bold text-fuchsia-400';
         dotEl.className = 'w-2 h-2 rounded-full bg-fuchsia-400';
       } else {
-        stateEl.textContent = 'Equilibrada';
+        stateEl.textContent = t('header.pressureState.balanced');
         stateEl.className = 'text-xs sm:text-sm font-bold text-sky-400';
         dotEl.className = 'w-2 h-2 rounded-full bg-sky-400';
       }
@@ -1960,25 +2499,25 @@
       deadPctEl.textContent = `${pct}%`;
       if (pct >= 28) {
         deadPctEl.className = 'font-mono-tech text-xs sm:text-sm font-bold text-rose-400';
-        deadLabelEl.textContent = 'Bolsas de calor';
+        deadLabelEl.textContent = t('header.stagnationLevel.heatPockets');
         deadCard.className = 'bg-rose-950/40 border border-rose-500/50 rounded-lg px-3 py-1.5 flex items-center gap-2';
-        diagBadge.textContent = 'RIESGO TÉRMICO';
+        diagBadge.textContent = t('diagnostics.badge.thermalRisk');
         diagBadge.className = 'text-[10px] font-mono-tech px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40';
-        diagText.textContent = `Se detecta un ${pct}% de volumen con aire estancado. Activa ventiladores de entrada o aumenta las RPM para mejorar la renovación de aire.`;
+        diagText.textContent = t('diagnostics.summary.thermalRisk', { pct });
       } else if (pct >= 15) {
         deadPctEl.className = 'font-mono-tech text-xs sm:text-sm font-bold text-amber-400';
-        deadLabelEl.textContent = 'Moderado';
+        deadLabelEl.textContent = t('header.stagnationLevel.moderate');
         deadCard.className = 'bg-slate-900/90 border border-amber-500/40 rounded-lg px-3 py-1.5 flex items-center gap-2';
-        diagBadge.textContent = 'ACEPTABLE';
+        diagBadge.textContent = t('diagnostics.badge.acceptable');
         diagBadge.className = 'text-[10px] font-mono-tech px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
-        diagText.textContent = `Flujo funcional (${pct}% estancado). Puedes ajustar las RPM o la disposición de los ventiladores para optimizar la renovación térmica.`;
+        diagText.textContent = t('diagnostics.summary.acceptable', { pct });
       } else {
         deadPctEl.className = 'font-mono-tech text-xs sm:text-sm font-bold text-emerald-400';
-        deadLabelEl.textContent = 'Renovación alta';
+        deadLabelEl.textContent = t('header.stagnationLevel.highTurnover');
         deadCard.className = 'bg-slate-900/90 border border-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-2';
-        diagBadge.textContent = 'ÓPTIMO';
+        diagBadge.textContent = t('diagnostics.badge.optimal');
         diagBadge.className = 'text-[10px] font-mono-tech px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
-        diagText.textContent = `Flujo aerodinámico óptimo (${pct}% estancado) con balance neto de ${signStr} CFM y ventilación continua.`;
+        diagText.textContent = t('diagnostics.summary.optimal', { pct, delta: signStr });
       }
     }
 
@@ -1987,14 +2526,16 @@
       const zoneFans = fans.filter(f => f.zone === simState.activeZoneTab);
 
       container.innerHTML = zoneFans.map(fan => {
+        const fanLabel = t(`fans.names.${fan.id}`);
+        fan.name = fanLabel;
         if (fan.fits === false) {
           return `
           <div class="p-3 rounded-lg bg-slate-950/60 border border-dashed border-slate-800 flex items-center justify-between gap-2 opacity-60">
             <div class="flex items-center gap-2">
               <span class="px-1.5 py-0.5 text-[11px] font-mono-tech font-bold rounded bg-slate-800 text-slate-500">${fan.id}</span>
-              <span class="text-xs font-medium text-slate-400">${fan.name}</span>
+              <span class="text-xs font-medium text-slate-400">${fanLabel}</span>
             </div>
-            <span class="text-[11px] text-amber-400">${fan.zone === 'front' ? 'Sin espacio vertical' : 'Sin espacio'}</span>
+            <span class="text-[11px] text-amber-400">${fan.zone === 'front' ? t('fans.status.noVerticalSpace') : t('fans.status.noSpace')}</span>
           </div>
         `;
         }
@@ -2005,25 +2546,25 @@
             <div class="flex items-center justify-between gap-2">
               <div class="flex items-center gap-2">
                 <span class="px-1.5 py-0.5 text-[11px] font-mono-tech font-bold rounded ${fan.enabled ? (isIntake ? 'bg-sky-500/20 text-sky-300' : 'bg-rose-500/20 text-rose-300') : 'bg-slate-800 text-slate-400'}">${fan.id}</span>
-                <span class="text-xs font-medium text-slate-200">${fan.name}</span>
+                <span class="text-xs font-medium text-slate-200">${fanLabel}</span>
               </div>
               <button data-fan-toggle="${fan.id}" class="px-2.5 py-1 rounded text-[11px] font-medium transition ${fan.enabled ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
-                ${fan.enabled ? 'Activo' : 'Inactivo'}
+                ${fan.enabled ? t('fans.status.active') : t('fans.status.inactive')}
               </button>
             </div>
 
             <div class="grid grid-cols-2 gap-1.5 ${!fan.enabled ? 'opacity-40 pointer-events-none' : ''}">
               <button data-fan-mode="${fan.id}" data-mode="intake" class="py-1 px-2 rounded text-[11px] font-medium border transition ${isIntake ? 'bg-sky-500/20 border-sky-500/50 text-sky-300' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'}">
-                Entrada
+                ${t('fans.mode.intake')}
               </button>
               <button data-fan-mode="${fan.id}" data-mode="exhaust" class="py-1 px-2 rounded text-[11px] font-medium border transition ${!isIntake ? 'bg-rose-500/20 border-rose-500/50 text-rose-300' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'}">
-                Salida
+                ${t('fans.mode.exhaust')}
               </button>
             </div>
 
             <div class="${!fan.enabled ? 'opacity-40 pointer-events-none' : ''}">
               <div class="flex justify-between text-[11px] mb-1">
-                <span class="text-slate-400">Velocidad</span>
+                <span class="text-slate-400">${t('fans.speed')}</span>
                 <span class="font-mono-tech text-slate-200">${fan.rpm} RPM <span class="text-sky-400">(${cfm} CFM)</span></span>
               </div>
               <input data-fan-rpm="${fan.id}" type="range" min="400" max="2200" step="50" value="${fan.rpm}" class="w-full" />
@@ -2069,8 +2610,8 @@
 
       const issues = [];
       const missingHorizontal = fans.filter(f => (f.zone === 'top' || f.zone === 'bottom') && f.fits === false).map(f => f.id);
-      if (missingHorizontal.length) issues.push(`Sin espacio para ${missingHorizontal.join(', ')}`);
-      if (getHardwareRects().gpuRect.clipped) issues.push(`La GPU de ${simState.gpuLengthMm} mm excede el ancho`);
+      if (missingHorizontal.length) issues.push(t('cabinet.warnNoSpaceFans', { fans: missingHorizontal.join(', ') }));
+      if (getHardwareRects().gpuRect.clipped) issues.push(t('cabinet.warnGpuExceedsWidth', { length: simState.gpuLengthMm }));
 
       const warnEl = document.getElementById('caseWidthWarning');
       warnEl.textContent = issues.join(' · ');
@@ -2085,10 +2626,10 @@
       const warnEl = document.getElementById('rightFansWarning');
 
       if (f3 && f3.fits === false) {
-        labelEl.textContent = `${sign} (2 ventiladores)`;
+        labelEl.textContent = t('cabinet.twoFansSuffix', { offset: sign });
         labelEl.className = 'font-mono-tech text-amber-400';
         if (warnEl) {
-          warnEl.textContent = 'Sin espacio vertical para F3.';
+          warnEl.textContent = t('cabinet.warnNoVerticalSpaceF3');
           warnEl.classList.remove('hidden');
         }
       } else {
@@ -2098,6 +2639,25 @@
           warnEl.textContent = '';
           warnEl.classList.add('hidden');
         }
+      }
+    }
+
+    function updateRearFanYUI() {
+      const val = simState.rearFanY;
+      const key = val < 15 ? 'cabinet.heightHigh' : (val > 22 ? 'cabinet.heightLow' : 'cabinet.heightMedium');
+      const el = document.getElementById('rearFanYLabel');
+      if (el) {
+        el.setAttribute('data-i18n', key);
+        el.textContent = t(key);
+      }
+    }
+
+    function updateGpuSlotUI() {
+      const key = simState.gpuSlotPos < 30 ? 'components.slotUpper' : (simState.gpuSlotPos < 70 ? 'components.slotMiddle' : 'components.slotLower');
+      const el = document.getElementById('gpuSlotLabel');
+      if (el) {
+        el.setAttribute('data-i18n', key);
+        el.textContent = t(key);
       }
     }
 
@@ -2111,31 +2671,53 @@
       const tabBottom = document.getElementById('tabBottomFans');
 
       if (isRear) {
-        if (lblTitle) lblTitle.textContent = 'Altura del gabinete';
+        if (lblTitle) {
+          lblTitle.setAttribute('data-i18n', 'cabinet.caseHeight');
+          lblTitle.textContent = t('cabinet.caseHeight');
+        }
         if (badgePsu) {
-          badgePsu.textContent = 'PSU trasera';
+          badgePsu.setAttribute('data-i18n', 'cabinet.rearPsu');
+          badgePsu.textContent = t('cabinet.rearPsu');
           badgePsu.className = 'text-[10px] font-mono-tech px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-500/40';
         }
         const mmHeight = Math.round((val - CASE_BOUNDS.yMin) * MM_PER_CELL);
         if (labelVal) {
+          labelVal.removeAttribute('data-i18n');
           labelVal.textContent = `${mmHeight} mm`;
           labelVal.className = 'font-mono-tech text-sky-400';
         }
-        if (badgeBottom) badgeBottom.textContent = 'En piso';
-        if (tabBottom) tabBottom.textContent = 'Inferior';
+        if (badgeBottom) {
+          badgeBottom.setAttribute('data-i18n', 'fans.badgeOnFloor');
+          badgeBottom.textContent = t('fans.badgeOnFloor');
+        }
+        if (tabBottom) {
+          tabBottom.setAttribute('data-i18n', 'fans.zones.bottom');
+          tabBottom.textContent = t('fans.zones.bottom');
+        }
       } else {
-        if (lblTitle) lblTitle.textContent = 'Altura de cámara PSU';
+        if (lblTitle) {
+          lblTitle.setAttribute('data-i18n', 'cabinet.psuChamberHeight');
+          lblTitle.textContent = t('cabinet.psuChamberHeight');
+        }
         if (badgePsu) {
-          badgePsu.textContent = 'PSU inferior';
+          badgePsu.setAttribute('data-i18n', 'cabinet.bottomPsu');
+          badgePsu.textContent = t('cabinet.bottomPsu');
           badgePsu.className = 'text-[10px] font-mono-tech px-1.5 py-0.5 rounded bg-slate-800 text-slate-400';
         }
-        const label = val < 48 ? 'Alta' : (val > 52 ? 'Baja' : 'Estándar');
+        const labelKey = val < 48 ? 'cabinet.heightHigh' : (val > 52 ? 'cabinet.heightLow' : 'cabinet.heightStandard');
         if (labelVal) {
-          labelVal.textContent = label;
+          labelVal.setAttribute('data-i18n', labelKey);
+          labelVal.textContent = t(labelKey);
           labelVal.className = 'font-mono-tech text-emerald-400';
         }
-        if (badgeBottom) badgeBottom.textContent = 'Sobre PSU';
-        if (tabBottom) tabBottom.textContent = 'Inferior';
+        if (badgeBottom) {
+          badgeBottom.setAttribute('data-i18n', 'fans.badgeAbovePsu');
+          badgeBottom.textContent = t('fans.badgeAbovePsu');
+        }
+        if (tabBottom) {
+          tabBottom.setAttribute('data-i18n', 'fans.zones.bottom');
+          tabBottom.textContent = t('fans.zones.bottom');
+        }
       }
     }
 
@@ -2271,7 +2853,7 @@
       document.getElementById('sliderRearFanY').addEventListener('input', (e) => {
         const val = parseInt(e.target.value, 10);
         simState.rearFanY = val;
-        document.getElementById('rearFanYLabel').textContent = val < 15 ? 'Alta' : (val > 22 ? 'Baja' : 'Media');
+        updateRearFanYUI();
         rebuildSolidGrid();
       });
 
@@ -2318,8 +2900,7 @@
       const sliderGpuY = document.getElementById('sliderGpuY');
       sliderGpuY.addEventListener('input', (e) => {
         simState.gpuSlotPos = parseInt(e.target.value, 10);
-        const slotTxt = simState.gpuSlotPos < 30 ? 'Superior' : (simState.gpuSlotPos < 70 ? 'Media' : 'Inferior');
-        document.getElementById('gpuSlotLabel').textContent = slotTxt;
+        updateGpuSlotUI();
         rebuildSolidGrid();
       });
 
@@ -2345,7 +2926,7 @@
       const btnToggleParticles = document.getElementById('btnToggleParticles');
       btnToggleParticles.addEventListener('click', () => {
         simState.showParticles = !simState.showParticles;
-        btnToggleParticles.className = `px-2.5 py-1 rounded-md text-xs font-medium border transition ${
+        btnToggleParticles.className = `px-3 py-1.5 rounded-md text-xs font-medium border transition flex items-center gap-1.5 ${
           simState.showParticles ? 'bg-sky-500/20 border-sky-500/50 text-sky-300' : 'bg-slate-900 border-slate-700 text-slate-400'
         }`;
       });
@@ -2353,7 +2934,7 @@
       const btnToggleVectors = document.getElementById('btnToggleVectors');
       btnToggleVectors.addEventListener('click', () => {
         simState.showVectors = !simState.showVectors;
-        btnToggleVectors.className = `px-2.5 py-1 rounded-md text-xs font-medium border transition ${
+        btnToggleVectors.className = `px-3 py-1.5 rounded-md text-xs font-medium border transition flex items-center gap-1.5 ${
           simState.showVectors ? 'bg-teal-500/20 border-teal-500/50 text-teal-300' : 'bg-slate-900 border-slate-700 text-slate-300'
         }`;
       });
@@ -2361,7 +2942,7 @@
       const btnToggleThermal = document.getElementById('btnToggleThermal');
       btnToggleThermal.addEventListener('click', () => {
         simState.showThermal = !simState.showThermal;
-        btnToggleThermal.className = `px-2.5 py-1 rounded-md text-xs font-medium border transition ${
+        btnToggleThermal.className = `px-3 py-1.5 rounded-md text-xs font-medium border transition flex items-center gap-1.5 ${
           simState.showThermal ? 'bg-orange-500/20 border-orange-500/50 text-orange-300' : 'bg-slate-900 border-slate-700 text-slate-400'
         }`;
       });
@@ -2369,7 +2950,7 @@
       const btnToggleDeadZones = document.getElementById('btnToggleDeadZones');
       btnToggleDeadZones.addEventListener('click', () => {
         simState.showDeadZones = !simState.showDeadZones;
-        btnToggleDeadZones.className = `px-2.5 py-1 rounded-md text-xs font-medium border transition ${
+        btnToggleDeadZones.className = `px-3 py-1.5 rounded-md text-xs font-medium border transition flex items-center gap-1.5 ${
           simState.showDeadZones ? 'bg-fuchsia-500/25 border-fuchsia-500/60 text-fuchsia-300' : 'bg-slate-900 border-slate-700 text-slate-300'
         }`;
       });
@@ -2384,7 +2965,10 @@
 
       document.getElementById('btnPauseSim').addEventListener('click', () => {
         simState.paused = !simState.paused;
-        document.getElementById('pauseText').textContent = simState.paused ? 'Reanudar' : 'Pausar';
+        const pauseEl = document.getElementById('pauseText');
+        const pauseKey = simState.paused ? 'controls.resume' : 'controls.pause';
+        pauseEl.setAttribute('data-i18n', pauseKey);
+        pauseEl.textContent = t(pauseKey);
       });
 
       document.getElementById('btnResetFluid').addEventListener('click', () => {
@@ -2462,9 +3046,10 @@
           document.getElementById('probeTemp').textContent = `${locT.toFixed(1)} °C`;
 
           const cellSolid = solid[IX(Math.round(pos.gx), Math.round(pos.gy))];
-          document.getElementById('probeZone').textContent =
-            cellSolid === 1 ? 'Componente' :
-            (cellSolid === 2 ? 'Disipador' : 'Interior');
+          const probeKey = cellSolid === 1 ? 'probe.component' : (cellSolid === 2 ? 'probe.heatsink' : 'probe.interior');
+          const probeZoneEl = document.getElementById('probeZone');
+          probeZoneEl.setAttribute('data-i18n', probeKey);
+          probeZoneEl.textContent = t(probeKey);
         } else {
           tooltip.classList.add('hidden');
         }
@@ -2530,12 +3115,10 @@
     window.onload = function () {
       resizeCanvas();
       rebuildSolidGrid();
-      updatePsuHeightUI();
-      updateCaseWidthUI();
-      updateRightFansYUI();
       resetFluidFields();
-      renderFanControlsList();
+      applyBoundaryAndSources();
       setupUIEvents();
+      initI18n();
       requestAnimationFrame(animateLoop);
     };
   </script>
